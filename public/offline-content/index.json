@@ -1,0 +1,225 @@
+{
+  "generatedAt": "2025-09-19T00:00:00Z",
+  "lessons": [
+    {
+      "id": "science-energy",
+      "title": {
+        "en": "Forms of Energy",
+        "hi": "ऊर्जा के प्रकार",
+        "bn": "শক্তির ধরন",
+        "ta": "ஆற்றல் வகைகள்",
+        "te": "శక్తి రకాలు",
+        "mr": "ऊर्जेचे प्रकार",
+        "gu": "ઊર્જાના પ્રકારો",
+        "kn": "ಶಕ್ತಿಯ ರೂಪಗಳು",
+        "ml": "ഊർജത്തിന്റെ രൂപങ്ങൾ",
+        "or": "ଶକ୍ତିର ପ୍ରକାର",
+        "pa": "ਊਰਜਾ ਦੇ ਰੂਪ",
+        "ur": "توانائی کی اقسام"
+      },
+      "grade": "6-8",
+      "path": "/offline-content/lessons/science-energy.json",
+      "thumbnail": "/offline-content/assets/science-energy.svg",
+      "sizeKb": 12,
+      "points": 10
+    },
+    {
+      "id": "science-circuits",
+      "title": {
+        "en": "Basic Circuits",
+        "hi": "बुनियादी सर्किट",
+        "bn": "মৌলিক সার্কিট",
+        "ta": "அடிப்படை சுற்றங்கள்",
+        "te": "అడిషనల్ సర్క్యూట్లు",
+        "mr": "मूल सर्किट",
+        "gu": "બેઝિક સર્કિટ",
+        "kn": "ಮೂಲ ಸಿರ್ಕ್ಯೂಟ್ಸ್",
+        "ml": "ആധാരഭൂത സർക്യൂട്ട്",
+        "or": "ମୌଳିକ ସର୍କିଟ୍",
+        "pa": "ਬੁਨਿਆਦੀ ਸਰਕਿਟ",
+        "ur": "بنیادی سرکٹس"
+      },
+      "grade": "7-9",
+      "path": "/offline-content/lessons/science-circuits.json",
+      "thumbnail": "/offline-content/assets/science-circuits.svg",
+      "sizeKb": 10,
+      "points": 12
+    },
+    {
+      "id": "science-humanbody",
+      "title": {
+        "en": "Human Body Basics",
+        "hi": "मानव शरीर के मूल बातें",
+        "bn": "মানব শরীরের মৌলিক বিষয়",
+        "ta": "மனித உடலின் அடிப்படை",
+        "te": "మనిషి శరీరానికి మూలభూత భావనలు",
+        "mr": "मानव शरीर मूलतत्त्वे",
+        "gu": "માનવ શરીરના મૂળભૂત તત્વો",
+        "kn": "ಮಾನವ ದೇಹದ ಮೂಲಭೂತಾಂಶ",
+        "ml": "മനുഷ്യ ശരീരത്തിന്റെ അടിസ്ഥാനങ്ങൾ",
+        "or": "ମାନବ ଦେହ ମୂଳତତ୍ତ୍ୱ",
+        "pa": "ਇਨਸਾਨੀ ਸਰੀਰ ਬਾਰੇ ਬੁਨਿਆਦੀ ਜਾਣਕਾਰੀ",
+        "ur": "انسانی جسم کی بنیادی باتیں"
+      },
+      "grade": "6-8",
+      "path": "/offline-content/lessons/science-humanbody.json",
+      "thumbnail": "/offline-content/assets/science-humanbody.svg",
+      "sizeKb": 11,
+      "points": 10
+    },
+    {
+      "id": "math-fractions",
+      "title": {
+        "en": "Fun with Fractions",
+        "hi": "भिन्न के साथ मज़ा",
+        "bn": "ভগ্নাংশের সাথে মজা",
+        "ta": "பகுதிகளுடன் மகிழ்ச்சி",
+        "te": "భిన్నాలతో సరదా",
+        "mr": "भिन्नांसोबत मजा",
+        "gu": "અંશો સાથે મજા",
+        "kn": "ಭಿನ್ನಗಳೊಂದಿಗೆ ವಸಂತ",
+        "ml": "ഭിന്നങ്ങളോടുള്ള രസതന്ത്രം",
+        "or": "ଅଂଶ ସହିତ ମଜା",
+        "pa": "ਭਿੰਨਾਂ ਨਾਲ ਮਜ਼ਾ",
+        "ur": "کسور کے ساتھ مزہ"
+      },
+      "grade": "6-9",
+      "path": "/offline-content/lessons/math-fractions.json",
+      "thumbnail": "/offline-content/assets/math-fractions.svg",
+      "sizeKb": 9,
+      "points": 8
+    },
+    {
+      "id": "math-algebra",
+      "title": {
+        "en": "Algebra Basics",
+        "hi": "बीजगणित के मूल",
+        "bn": "বীজগণিত ভিত্তি",
+        "ta": "அல்ஜீப்ரா அடிப்படை",
+        "te": "బీజగణిత ప్రాథమికాలు",
+        "mr": "बीजगणित मूलभूत",
+        "gu": "બિજગણિત મૂળભૂત",
+        "kn": "ಆಲ್ಜೀಬ್ರಾ ಮೂಲಭೂತ",
+        "ml": "ആൽജിബ്ര അടിസ്ഥാനങ്ങൾ",
+        "or": "ଆଲ୍ଜେବ୍ରା ମୂଳଭୂତ",
+        "pa": "ਐਲਜੀਬਰਾ ਬੁਨਿਆਦੀ",
+        "ur": "الجبر کی بنیادی باتیں"
+      },
+      "grade": "8-10",
+      "path": "/offline-content/lessons/math-algebra.json",
+      "thumbnail": "/offline-content/assets/math-algebra.svg",
+      "sizeKb": 9,
+      "points": 12
+    },
+    {
+      "id": "math-probability",
+      "title": {
+        "en": "Probability Puzzles",
+        "hi": "संभाव्यता पहेलियाँ",
+        "bn": "সম্ভাব্যতা ধাঁধা",
+        "ta": "சாதிப்பு புதிர்கள்",
+        "te": "సంభావ్యత పజిల్స్",
+        "mr": "सांभाव्यता कोडे",
+        "gu": "સંભાવ્યતા પઝલ્સ",
+        "kn": "ಸಾಧ್ಯತೆ ಪಜಲ್ಸ್",
+        "ml": "സാധ്യത പസിലുകൾ",
+        "or": "ସମ୍ଭାବ୍ୟତା ପଜଲ୍",
+        "pa": "ਸੰਭਾਵਨਾ ਪਜ਼ਲ",
+        "ur": "امکانی معمے"
+      },
+      "grade": "9-12",
+      "path": "/offline-content/lessons/math-probability.json",
+      "thumbnail": "",
+      "sizeKb": 6,
+      "points": 15
+    },
+    {
+      "id": "tech-machines",
+      "title": {
+        "en": "Simple Machines",
+        "hi": "सरल मशीनें",
+        "bn": "সরল যন্ত্র",
+        "ta": "எளிய இயந்திரங்கள்",
+        "te": "సాదాసీది యంత్రాలు",
+        "mr": "साधी यंत्रे",
+        "gu": "સરળ મશીનો",
+        "kn": "ಸರಳ ಯಂತ್ರಗಳು",
+        "ml": "സിമ്പിൾ മെഷീനുകൾ",
+        "or": "ସରଳ ଯନ୍ତ୍ର",
+        "pa": "ਸਰਲ ਮਸ਼ੀਨਾਂ",
+        "ur": "سادہ مشینیں"
+      },
+      "grade": "7-10",
+      "path": "/offline-content/lessons/tech-machines.json",
+      "thumbnail": "/offline-content/assets/tech-machines.svg",
+      "sizeKb": 11,
+      "points": 12
+    },
+    {
+      "id": "tech-coding",
+      "title": {
+        "en": "Coding Logic Games",
+        "hi": "कोडिंग लॉजिक गेम",
+        "bn": "কোডিং লজিক গেমস",
+        "ta": "கோடிங் லாஜிக் கேம்கள்",
+        "te": "కోడింగ్ లాజిక్ గేమ్స్",
+        "mr": "कोडिंग लॉजिक गेम्स",
+        "gu": "કોડિંગ લોજિક ગેમ્સ",
+        "kn": "ಕೋಡಿಂಗ್ ಲಾಜಿಕ್ ಆಟಗಳು",
+        "ml": "കോടിംഗ് ലോഗിക്ക് ഗെയിമുകൾ",
+        "or": "କୋଡିଂ ଲଜିକ୍ ଖେଳ",
+        "pa": "ਕੋਡਿੰਗ ਲਾਜ਼ਿਕ ਗੇਮ",
+        "ur": "کوڈنگ لاجک گیمز"
+      },
+      "grade": "9-12",
+      "path": "/offline-content/lessons/tech-coding.json",
+      "thumbnail": "",
+      "sizeKb": 8,
+      "points": 15
+    },
+    {
+      "id": "arts-patterns",
+      "title": {
+        "en": "Patterns & Symmetry",
+        "hi": "पैटर्न और समरूपता",
+        "bn": "নকশা ও সম্মতি",
+        "ta": "வடிவமைப்புகள் & சமமா",
+        "te": "నమూనాలు & సమరూపత",
+        "mr": "पॅटर्न आणि समरूपता",
+        "gu": "પેટર્ન્સ અને સમરૂપતા",
+        "kn": "ರೂಪರೆಖೆಗಳು & ಸಮರಸತೆ",
+        "ml": "ഭാഗവത്കതയും സമരൂപതയും",
+        "or": "ନମୁନା ଏବଂ ସମରୂପତା",
+        "pa": "ਪੈਟਰਨ ਅਤੇ ਸਮਰੂਪਤਾ",
+        "ur": "انداز اور ہم آہنگی"
+      },
+      "grade": "6-9",
+      "path": "/offline-content/lessons/arts-patterns.json",
+      "thumbnail": "/offline-content/assets/arts-patterns.svg",
+      "sizeKb": 8,
+      "points": 8
+    },
+    {
+      "id": "games-sudoku",
+      "title": {
+        "en": "Mini Sudoku",
+        "hi": "मिनी सुडोकू",
+        "bn": "মিনি সুডোকু",
+        "ta": "மினி சூடோகு",
+        "te": "మినీ సుడోకు",
+        "mr": "मिनी सुडोकू",
+        "gu": "મિની સુડોકુ",
+        "kn": "ಮಿನಿ ಸಿನಿಮಾ (ಸुडೋಕು)",
+        "ml": "മിനി സുഡോക്കു",
+        "or": "ମିନି ସୁଡୋକୁ",
+        "pa": "ਮਿਨੀ ਸੁਡੋਕੂ",
+        "ur": "منی سوڈوکو"
+      },
+      "grade": "8-12",
+      "path": "/offline-content/lessons/games-sudoku.json",
+      "thumbnail": "",
+      "sizeKb": 7,
+      "points": 20
+    }
+  ]
+}

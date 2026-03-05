@@ -1,0 +1,15 @@
+{
+  "id": "science-circuits",
+  "title": { "en": "Basic Circuits", "hi": "बुनियादी सर्किट" },
+  "grade": "7-9",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Electric circuits let current flow. A simple circuit: battery, wires, and a bulb." },
+      { "type": "image", "value": "/offline-content/assets/science-circuits.svg" },
+      { "type": "story", "value": "Riya built a simple circuit with a battery and LED to light up a small model house." },
+      { "type": "quiz", "question": "What completes a circuit?", "options": ["Open switch", "Closed loop"], "answer": 1 }
+    ]
+  },
+  "assets": ["/offline-content/assets/science-circuits.svg"],
+  "meta": { "points": 12, "badge": "circuit-solver" }
+}

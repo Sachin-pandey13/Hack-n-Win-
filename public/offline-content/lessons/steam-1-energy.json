@@ -1,0 +1,16 @@
+{
+  "id": "steam-1-energy",
+  "title": { "en": "Forms of Energy", "hi": "ऊर्जा के प्रकार" },
+  "grade": "6-8",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Energy is the ability to do work. Two common types: kinetic (motion) and potential (stored)." },
+      { "type": "quiz", "question": "Which is kinetic energy?", "options": ["A parked car", "A rolling ball"], "answer": 1 }
+    ],
+    "hi": [
+      { "type": "text", "value": "ऊर्जा काम करने की क्षमता है। काइनैटिक और पोटेंशियल ऊर्जा सामान्य प्रकार हैं।" }
+    ]
+  },
+  "assets": ["/offline-content/assets/energy.svg"],
+  "meta": { "points": 10, "badge": "energy-explorer" }
+}

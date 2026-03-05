@@ -1,0 +1,13 @@
+{
+  "id": "games-sudoku",
+  "title": { "en": "Mini Sudoku", "hi": "मिनी सुडोकू" },
+  "grade": "8-12",
+  "content": {
+    "en": [
+      { "type": "text", "value": "A small 4x4 Sudoku: fill numbers so each row and column and 2x2 box has 1–4." },
+      { "type": "exercise", "prompt": "Try this small puzzle on paper or draw a 4x4 grid." }
+    ]
+  },
+  "assets": [],
+  "meta": { "points": 20, "badge": "sudoku-star" }
+}

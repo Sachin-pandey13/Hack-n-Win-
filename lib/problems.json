@@ -1,0 +1,1593 @@
+[
+  {
+    "id": "two-sum",
+    "number": 1,
+    "title": "Two Sum",
+    "difficulty": "Easy",
+    "acceptance": 0.45,
+    "tags": ["Arrays", "Hash Table"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return indices of two numbers such that they add up to target.",
+      "examples": [
+        { "input": "nums=[2,7,11,15], target=9", "output": "[0,1]" },
+        { "input": "nums=[3,2,4], target=6", "output": "[1,2]" }
+      ],
+      "constraints": ["2 ≤ n ≤ 1e5", "-1e9 ≤ nums[i], target ≤ 1e9"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use a hash map to store complements and check in one pass."
+    }
+  },
+  {
+    "id": "contains-duplicate",
+    "number": 217,
+    "title": "Contains Duplicate",
+    "difficulty": "Easy",
+    "acceptance": 0.62,
+    "tags": ["Arrays", "Hash Table", "Sorting"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return true if any value appears at least twice.",
+      "examples": [
+        { "input": "nums=[1,2,3,1]", "output": "true" },
+        { "input": "nums=[1,2,3,4]", "output": "false" }
+      ],
+      "constraints": ["1 ≤ n ≤ 1e5", "-1e9 ≤ nums[i] ≤ 1e9"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use a hash set to check for duplicates in one pass."
+    }
+  },
+  {
+    "id": "product-except-self",
+    "number": 238,
+    "title": "Product of Array Except Self",
+    "difficulty": "Medium",
+    "acceptance": 0.66,
+    "tags": ["Arrays", "Prefix Sum"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return an array answer where answer[i] is product of all nums except nums[i] (no division).",
+      "examples": [{ "input": "nums=[1,2,3,4]", "output": "[24,12,8,6]" }],
+      "constraints": ["2 ≤ n ≤ 1e5", "|nums[i]| ≤ 30"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use prefix and suffix products directly in the output array."
+    }
+  },
+  {
+    "id": "max-subarray",
+    "number": 53,
+    "title": "Maximum Subarray",
+    "difficulty": "Medium",
+    "acceptance": 0.53,
+    "tags": ["Arrays", "DP"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find the contiguous subarray with the largest sum.",
+      "examples": [{ "input": "nums=[-2,1,-3,4,-1,2,1,-5,4]", "output": "6" }],
+      "constraints": ["1 ≤ n ≤ 1e5", "-1e4 ≤ nums[i] ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Kadane’s algorithm tracks running sum and max sum in one pass."
+    }
+  },
+  {
+    "id": "merge-intervals",
+    "number": 56,
+    "title": "Merge Intervals",
+    "difficulty": "Medium",
+    "acceptance": 0.49,
+    "tags": ["Arrays", "Sorting"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Merge all overlapping intervals.",
+      "examples": [
+        { "input": "intervals=[[1,3],[2,6],[8,10],[15,18]]", "output": "[[1,6],[8,10],[15,18]]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 1e4", "0 ≤ li ≤ ri ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sort intervals by start and merge sequentially."
+    }
+  },
+  {
+    "id": "binary-search",
+    "number": 704,
+    "title": "Binary Search",
+    "difficulty": "Easy",
+    "acceptance": 0.57,
+    "tags": ["Binary Search", "Arrays"],
+    "category": "Binary Search",
+    "languages": ["cpp", "java", "python", "c", "javascript"],
+    "statement": {
+      "content": "Return index of target in sorted array or -1 if not found.",
+      "examples": [{ "input": "nums=[-1,0,3,5,9,12], target=9", "output": "4" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Classic binary search halves the range each step."
+    }
+  },
+  {
+    "id": "first-bad-version",
+    "number": 278,
+    "title": "First Bad Version",
+    "difficulty": "Easy",
+    "acceptance": 0.44,
+    "tags": ["Binary Search"],
+    "category": "Binary Search",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Given isBadVersion API, find first bad version using minimal calls.",
+      "examples": [{ "input": "n=5, bad=4", "output": "4" }],
+      "constraints": ["1 ≤ n ≤ 2^31-1"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use binary search to narrow down the first bad version."
+    }
+  },
+  {
+    "id": "search-rotated",
+    "number": 33,
+    "title": "Search in Rotated Sorted Array",
+    "difficulty": "Medium",
+    "acceptance": 0.39,
+    "tags": ["Binary Search", "Arrays"],
+    "category": "Binary Search",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Search target in rotated sorted array in O(log n).",
+      "examples": [{ "input": "nums=[4,5,6,7,0,1,2], target=0", "output": "4" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(log n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Modified binary search checks which half is sorted each step."
+    }
+  },
+  {
+    "id": "koko-eating-bananas",
+    "number": 875,
+    "title": "Koko Eating Bananas",
+    "difficulty": "Medium",
+    "acceptance": 0.54,
+    "tags": ["Binary Search"],
+    "category": "Binary Search",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find minimal integer eating speed to finish within h hours.",
+      "examples": [{ "input": "piles=[3,6,7,11], h=8", "output": "4" }],
+      "constraints": ["1 ≤ n ≤ 1e5", "1 ≤ piles[i] ≤ 1e9"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log m)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search on possible eating speed, checking feasibility with greedy simulation."
+    }
+  },
+  {
+    "id": "min-days-bouquets",
+    "number": 1482,
+    "title": "Minimum Number of Days to Make m Bouquets",
+    "difficulty": "Medium",
+    "acceptance": 0.40,
+    "tags": ["Binary Search"],
+    "category": "Binary Search",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Binary search on days to check if m bouquets possible.",
+      "examples": [{ "input": "bloom=[1,10,3,10,2], m=3, k=1", "output": "3" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log max(bloom[i]))",
+      "spaceComplexity": "O(1)",
+      "explanation": "Binary search the minimal days and check feasibility by scanning flowers."
+    }
+  },
+
+  
+  {
+    "id": "longest-substring-without-repeat",
+    "number": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "difficulty": "Medium",
+    "acceptance": 0.34,
+    "tags": ["Strings", "Sliding Window", "Hash Table"],
+    "category": "Sliding Window",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return length of the longest substring without duplicates.",
+      "examples": [{ "input": "s=\"abcabcbb\"", "output": "3" }],
+      "constraints": ["1 ≤ |s| ≤ 5e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(min(n, charset))",
+      "explanation": "Use sliding window with a hash set to maintain unique characters."
+    }
+  },
+  {
+    "id": "min-window-substring",
+    "number": 76,
+    "title": "Minimum Window Substring",
+    "difficulty": "Hard",
+    "acceptance": 0.39,
+    "tags": ["Strings", "Sliding Window", "Hash Table"],
+    "category": "Sliding Window",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find the minimum window in s which contains all chars of t.",
+      "examples": [{ "input": "s=\"ADOBECODEBANC\", t=\"ABC\"", "output": "\"BANC\"" }],
+      "constraints": ["1 ≤ |s|,|t| ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n + m)",
+      "spaceComplexity": "O(m)",
+      "explanation": "Use sliding window with two hash maps to count characters."
+    }
+  },
+  {
+    "id": "two-sum-ii",
+    "number": 167,
+    "title": "Two Sum II – Input array is sorted",
+    "difficulty": "Medium",
+    "acceptance": 0.58,
+    "tags": ["Two Pointers", "Arrays"],
+    "category": "Two Pointers",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find two numbers in sorted array that add to target. 1-indexed.",
+      "examples": [{ "input": "numbers=[2,7,11,15], target=9", "output": "[1,2]" }],
+      "constraints": ["2 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use two-pointer technique from both ends."
+    }
+  },
+  {
+    "id": "container-with-most-water",
+    "number": 11,
+    "title": "Container With Most Water",
+    "difficulty": "Medium",
+    "acceptance": 0.55,
+    "tags": ["Two Pointers", "Greedy", "Arrays"],
+    "category": "Two Pointers",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Max area formed by two lines using two-pointer technique.",
+      "examples": [{ "input": "height=[1,8,6,2,5,4,8,3,7]", "output": "49" }],
+      "constraints": ["2 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Start with both ends and move the smaller line inward."
+    }
+  },
+  {
+    "id": "3sum",
+    "number": 15,
+    "title": "3Sum",
+    "difficulty": "Medium",
+    "acceptance": 0.34,
+    "tags": ["Two Pointers", "Sorting", "Arrays"],
+    "category": "Two Pointers",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find all unique triplets that sum to zero.",
+      "examples": [{ "input": "nums=[-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]" }],
+      "constraints": ["3 ≤ n ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Sort and use two pointers for each fixed element."
+    }
+  },
+  {
+    "id": "valid-anagram",
+    "number": 242,
+    "title": "Valid Anagram",
+    "difficulty": "Easy",
+    "acceptance": 0.63,
+    "tags": ["Strings", "Hash Table", "Sorting"],
+    "category": "Strings",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return true if t is an anagram of s.",
+      "examples": [{ "input": "s=\"anagram\", t=\"nagaram\"", "output": "true" }],
+      "constraints": ["1 ≤ |s|,|t| ≤ 5e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Count characters using fixed alphabet size array."
+    }
+  },
+  {
+    "id": "valid-parentheses",
+    "number": 20,
+    "title": "Valid Parentheses",
+    "difficulty": "Easy",
+    "acceptance": 0.42,
+    "tags": ["Stack", "Strings"],
+    "category": "Stack",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Check if parentheses string is valid.",
+      "examples": [{ "input": "s=\"()[]{}\"", "output": "true" }],
+      "constraints": ["1 ≤ |s| ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use a stack to match opening and closing brackets."
+    }
+  },
+  {
+    "id": "group-anagrams",
+    "number": 49,
+    "title": "Group Anagrams",
+    "difficulty": "Medium",
+    "acceptance": 0.64,
+    "tags": ["Strings", "Hash Table", "Sorting"],
+    "category": "Strings",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Group strings that are anagrams.",
+      "examples": [{ "input": "strs=[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]", "output": "[[\"eat\",\"tea\",\"ate\"],[\"tan\",\"nat\"],[\"bat\"]]" }],
+      "constraints": ["1 ≤ n ≤ 1e4", "1 ≤ |str| ≤ 100"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n * k log k)",
+      "spaceComplexity": "O(nk)",
+      "explanation": "Use sorted string as key in hash map."
+    }
+  },
+  {
+    "id": "longest-palindrome-substring",
+    "number": 5,
+    "title": "Longest Palindromic Substring",
+    "difficulty": "Medium",
+    "acceptance": 0.35,
+    "tags": ["Strings", "DP", "Two Pointers"],
+    "category": "Strings",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return the longest palindromic substring.",
+      "examples": [{ "input": "s=\"babad\"", "output": "\"bab\" (or \"aba\")" }],
+      "constraints": ["1 ≤ |s| ≤ 1e3"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Expand around center for each index."
+    }
+  },
+  {
+    "id": "top-k-frequent",
+    "number": 347,
+    "title": "Top K Frequent Elements",
+    "difficulty": "Medium",
+    "acceptance": 0.64,
+    "tags": ["Heap", "Hash Table", "Sorting"],
+    "category": "Heap",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return the k most frequent elements.",
+      "examples": [{ "input": "nums=[1,1,1,2,2,3], k=2", "output": "[1,2]" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log k)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use a hash map to count and a min-heap of size k."
+    }
+  },
+
+  
+  {
+    "id": "kth-largest-element",
+    "number": 215,
+    "title": "Kth Largest Element in an Array",
+    "difficulty": "Medium",
+    "acceptance": 0.59,
+    "tags": ["Heap", "Quickselect", "Sorting"],
+    "category": "Heap",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find the kth largest element in an unsorted array.",
+      "examples": [{ "input": "nums=[3,2,1,5,6,4], k=2", "output": "5" }],
+      "constraints": ["1 ≤ k ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use Quickselect (average O(n)), or min-heap of size k."
+    }
+  },
+  {
+    "id": "meeting-rooms-ii",
+    "number": 253,
+    "title": "Meeting Rooms II",
+    "difficulty": "Medium",
+    "acceptance": 0.57,
+    "tags": ["Heap", "Greedy", "Sorting"],
+    "category": "Heap",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find minimum number of meeting rooms required.",
+      "examples": [{ "input": "intervals=[[0,30],[5,10],[15,20]]", "output": "2" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Sort by start time and use a min-heap to track end times."
+    }
+  },
+  {
+    "id": "merge-k-sorted-lists",
+    "number": 23,
+    "title": "Merge k Sorted Lists",
+    "difficulty": "Hard",
+    "acceptance": 0.45,
+    "tags": ["Heap", "Linked List", "Divide and Conquer"],
+    "category": "Heap",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Merge k sorted linked lists into one sorted list.",
+      "examples": [
+        { "input": "lists=[[1,4,5],[1,3,4],[2,6]]", "output": "[1,1,2,3,4,4,5,6]" }
+      ],
+      "constraints": ["0 ≤ k ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log k)",
+      "spaceComplexity": "O(k)",
+      "explanation": "Use a min-heap to merge k lists efficiently."
+    }
+  },
+  {
+    "id": "invert-binary-tree",
+    "number": 226,
+    "title": "Invert Binary Tree",
+    "difficulty": "Easy",
+    "acceptance": 0.78,
+    "tags": ["Tree", "DFS", "BFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Invert a binary tree by swapping left and right child nodes recursively.",
+      "examples": [{ "input": "root=[4,2,7,1,3,6,9]", "output": "[4,7,2,9,6,3,1]" }],
+      "constraints": ["1 ≤ n ≤ 1000"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "DFS recursive swap each node’s children."
+    }
+  },
+  {
+    "id": "validate-bst",
+    "number": 98,
+    "title": "Validate Binary Search Tree",
+    "difficulty": "Medium",
+    "acceptance": 0.32,
+    "tags": ["Tree", "DFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Check if a binary tree is a valid BST.",
+      "examples": [{ "input": "root=[2,1,3]", "output": "true" }],
+      "constraints": ["1 ≤ n ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "Use DFS with lower/upper bounds check."
+    }
+  },
+  {
+    "id": "lowest-common-ancestor",
+    "number": 236,
+    "title": "Lowest Common Ancestor of a Binary Tree",
+    "difficulty": "Medium",
+    "acceptance": 0.56,
+    "tags": ["Tree", "DFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find the lowest common ancestor (LCA) of two nodes in a binary tree.",
+      "examples": [{ "input": "root=[3,5,1,6,2,0,8,null,null,7,4], p=5, q=1", "output": "3" }],
+      "constraints": ["2 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "DFS recursion: return node if equal to p/q, else propagate upwards."
+    }
+  },
+  {
+    "id": "serialize-deserialize-bt",
+    "number": 297,
+    "title": "Serialize and Deserialize Binary Tree",
+    "difficulty": "Hard",
+    "acceptance": 0.53,
+    "tags": ["Tree", "BFS", "DFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Serialize a binary tree to a string and deserialize it back.",
+      "examples": [{ "input": "root=[1,2,3,null,null,4,5]", "output": "[1,2,3,null,null,4,5]" }],
+      "constraints": ["1 ≤ n ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use BFS with null markers for serialization."
+    }
+  },
+  {
+    "id": "binary-tree-level-order",
+    "number": 102,
+    "title": "Binary Tree Level Order Traversal",
+    "difficulty": "Medium",
+    "acceptance": 0.64,
+    "tags": ["Tree", "BFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return the level order traversal of a binary tree.",
+      "examples": [{ "input": "root=[3,9,20,null,null,15,7]", "output": "[[3],[9,20],[15,7]]" }],
+      "constraints": ["1 ≤ n ≤ 1e4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use BFS queue to traverse each level."
+    }
+  },
+  {
+    "id": "construct-binary-tree-inorder-postorder",
+    "number": 106,
+    "title": "Construct Binary Tree from Inorder and Postorder Traversal",
+    "difficulty": "Medium",
+    "acceptance": 0.55,
+    "tags": ["Tree", "DFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Construct binary tree from inorder and postorder traversal arrays.",
+      "examples": [
+        { "input": "inorder=[9,3,15,20,7], postorder=[9,15,7,20,3]", "output": "[3,9,20,null,null,15,7]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use hash map for inorder indices and recursive build."
+    }
+  },
+  {
+    "id": "binary-tree-max-path-sum",
+    "number": 124,
+    "title": "Binary Tree Maximum Path Sum",
+    "difficulty": "Hard",
+    "acceptance": 0.40,
+    "tags": ["Tree", "DFS"],
+    "category": "Tree",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return maximum path sum in binary tree.",
+      "examples": [{ "input": "root=[-10,9,20,null,null,15,7]", "output": "42" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(h)",
+      "explanation": "DFS recursion: compute max gain for each node."
+    }
+  },
+
+  {
+    "id": "number-of-islands",
+    "number": 200,
+    "title": "Number of Islands",
+    "difficulty": "Medium",
+    "acceptance": 0.55,
+    "tags": ["Graph", "DFS", "BFS", "Union Find"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Count the number of islands in a 2D grid of '1's (land) and '0's (water).",
+      "examples": [
+        { "input": "grid=[[1,1,1,1,0],[1,1,0,1,0],[1,1,0,0,0],[0,0,0,0,0]]", "output": "1" }
+      ],
+      "constraints": ["1 ≤ m, n ≤ 300"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "Use DFS/BFS to sink connected components of land."
+    }
+  },
+  {
+    "id": "clone-graph",
+    "number": 133,
+    "title": "Clone Graph",
+    "difficulty": "Medium",
+    "acceptance": 0.42,
+    "tags": ["Graph", "DFS", "BFS"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Clone an undirected graph given its adjacency list.",
+      "examples": [
+        { "input": "adjList=[[2,4],[1,3],[2,4],[1,3]]", "output": "[[2,4],[1,3],[2,4],[1,3]]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 100"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V)",
+      "explanation": "Use DFS/BFS with hashmap mapping old nodes to new clones."
+    }
+  },
+  {
+    "id": "course-schedule",
+    "number": 207,
+    "title": "Course Schedule",
+    "difficulty": "Medium",
+    "acceptance": 0.46,
+    "tags": ["Graph", "Topological Sort"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Given numCourses and prerequisites, determine if you can finish all courses.",
+      "examples": [{ "input": "numCourses=2, prerequisites=[[1,0]]", "output": "true" }],
+      "constraints": ["1 ≤ numCourses ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V+E)",
+      "explanation": "Use Kahn’s BFS or DFS cycle detection."
+    }
+  },
+  {
+    "id": "pacific-atlantic-water-flow",
+    "number": 417,
+    "title": "Pacific Atlantic Water Flow",
+    "difficulty": "Medium",
+    "acceptance": 0.55,
+    "tags": ["Graph", "DFS", "BFS"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return list of coordinates where water can flow to both Pacific and Atlantic oceans.",
+      "examples": [
+        { "input": "matrix=[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]", "output": "[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 200"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "Run DFS/BFS from Pacific and Atlantic edges, intersect results."
+    }
+  },
+  {
+    "id": "word-ladder",
+    "number": 127,
+    "title": "Word Ladder",
+    "difficulty": "Hard",
+    "acceptance": 0.32,
+    "tags": ["Graph", "BFS"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return length of shortest transformation sequence from beginWord to endWord.",
+      "examples": [{ "input": "beginWord=hit, endWord=cog, wordList=[hot,dot,dog,lot,log,cog]", "output": "5" }],
+      "constraints": ["1 ≤ |wordList| ≤ 5000"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(N*L^2)",
+      "spaceComplexity": "O(N*L)",
+      "explanation": "Use BFS + adjacency with wildcards."
+    }
+  },
+  {
+    "id": "implement-trie",
+    "number": 208,
+    "title": "Implement Trie (Prefix Tree)",
+    "difficulty": "Medium",
+    "acceptance": 0.64,
+    "tags": ["Trie", "Design"],
+    "category": "Trie",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Implement a trie with insert, search, and startsWith methods.",
+      "examples": [
+        { "input": "insert: apple, search: apple, search: app, startsWith: app", "output": "true, false, true" }
+      ],
+      "constraints": ["1 ≤ words ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(N*L)",
+      "spaceComplexity": "O(N*L)",
+      "explanation": "Each node stores 26 children, insert/search in O(L)."
+    }
+  },
+  {
+    "id": "design-add-search-words-ds",
+    "number": 211,
+    "title": "Design Add and Search Words Data Structure",
+    "difficulty": "Medium",
+    "acceptance": 0.47,
+    "tags": ["Trie", "DFS"],
+    "category": "Trie",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Design a data structure that supports adding and searching words with '.' wildcard.",
+      "examples": [
+        { "input": "addWord: bad, addWord: dad, addWord: mad, search: pad, search: bad, search: .ad, search: b..", "output": "false,true,true,true" }
+      ],
+      "constraints": ["1 ≤ words ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(N*L)",
+      "spaceComplexity": "O(N*L)",
+      "explanation": "Use trie with DFS when encountering '.'"
+    }
+  },
+  {
+    "id": "word-search-ii",
+    "number": 212,
+    "title": "Word Search II",
+    "difficulty": "Hard",
+    "acceptance": 0.37,
+    "tags": ["Trie", "DFS", "Backtracking"],
+    "category": "Trie",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find all words from the dictionary that can be formed in a board of chars.",
+      "examples": [
+        { "input": "board=[[o,a,a,n],[e,t,a,e],[i,h,k,r],[i,f,l,v]], words=[oath,pea,eat,rain]", "output": "[eat,oath]" }
+      ],
+      "constraints": ["1 ≤ |board|, |words| ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(N*L)",
+      "spaceComplexity": "O(N*L)",
+      "explanation": "Insert words in trie, backtrack DFS from board cells."
+    }
+  },
+  {
+    "id": "implement-word-dictionary",
+    "number": 211,
+    "title": "Implement Word Dictionary",
+    "difficulty": "Medium",
+    "acceptance": 0.47,
+    "tags": ["Trie"],
+    "category": "Trie",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Similar to add and search words with '.' support.",
+      "examples": [
+        { "input": "addWord: bad, addWord: dad, addWord: mad, search: .ad", "output": "true" }
+      ],
+      "constraints": ["1 ≤ words ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(N*L)",
+      "spaceComplexity": "O(N*L)",
+      "explanation": "Trie with recursive DFS for wildcards."
+    }
+  },
+  {
+    "id": "longest-consecutive-sequence",
+    "number": 128,
+    "title": "Longest Consecutive Sequence",
+    "difficulty": "Medium",
+    "acceptance": 0.50,
+    "tags": ["HashSet", "Union Find"],
+    "category": "Hash Table",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find length of longest consecutive sequence in array.",
+      "examples": [{ "input": "nums=[100,4,200,1,3,2]", "output": "4" }],
+      "constraints": ["1 ≤ n ≤ 1e5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use hash set, expand sequence only from sequence starts."
+    }
+  },
+
+  
+  {
+    "id": "lru-cache",
+    "number": 146,
+    "title": "LRU Cache",
+    "difficulty": "Medium",
+    "acceptance": 0.42,
+    "tags": ["Design", "Hash Table", "Linked List"],
+    "category": "Design",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Design a data structure that supports get and put in O(1) time using LRU eviction policy.",
+      "examples": [
+        { "input": "LRUCache cache = new LRUCache(2); cache.put(1,1); cache.put(2,2); cache.get(1); cache.put(3,3); cache.get(2)", "output": "-1" }
+      ],
+      "constraints": ["1 ≤ capacity ≤ 3000", "-10^4 ≤ key,value ≤ 10^4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(capacity)",
+      "explanation": "Use a combination of HashMap and Doubly Linked List to achieve O(1) get and put operations."
+    }
+  },
+  {
+    "id": "min-stack",
+    "number": 155,
+    "title": "Min Stack",
+    "difficulty": "Medium",
+    "acceptance": 0.52,
+    "tags": ["Stack", "Design"],
+    "category": "Stack",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Design a stack that supports push, pop, top, and retrieving the minimum element in O(1).",
+      "examples": [
+        { "input": "MinStack stack = new MinStack(); stack.push(-2); stack.push(0); stack.push(-3); stack.getMin()", "output": "-3" }
+      ],
+      "constraints": ["-2^31 ≤ val ≤ 2^31-1", "At most 3 * 10^4 calls will be made"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(1)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Maintain two stacks: one for values, another for minimums. Each push updates the min stack."
+    }
+  },
+  {
+    "id": "implement-queue-using-stacks",
+    "number": 232,
+    "title": "Implement Queue using Stacks",
+    "difficulty": "Easy",
+    "acceptance": 0.64,
+    "tags": ["Stack", "Queue", "Design"],
+    "category": "Queue",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Implement a first in first out (FIFO) queue using only two stacks.",
+      "examples": [
+        { "input": "MyQueue q = new MyQueue(); q.push(1); q.push(2); q.peek()", "output": "1" }
+      ],
+      "constraints": ["1 ≤ calls ≤ 100"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "Amortized O(1)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use two stacks. One for enqueue, one for dequeue. Transfer when needed."
+    }
+  },
+  {
+    "id": "number-of-islands",
+    "number": 200,
+    "title": "Number of Islands",
+    "difficulty": "Medium",
+    "acceptance": 0.55,
+    "tags": ["DFS", "BFS", "Graph"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Given a 2D grid map of '1's (land) and '0's (water), count the number of islands.",
+      "examples": [
+        { "input": "grid = [[1,1,0,0,0],[1,1,0,0,0],[0,0,1,0,0],[0,0,0,1,1]]", "output": "3" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 300"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "Use DFS/BFS or Union-Find to traverse and count connected components."
+    }
+  },
+  {
+    "id": "course-schedule",
+    "number": 207,
+    "title": "Course Schedule",
+    "difficulty": "Medium",
+    "acceptance": 0.47,
+    "tags": ["Graph", "Topological Sort"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "There are numCourses courses. Given prerequisites, determine if you can finish all courses.",
+      "examples": [
+        { "input": "numCourses=2, prerequisites=[[1,0]]", "output": "true" }
+      ],
+      "constraints": ["1 ≤ numCourses ≤ 2000", "0 ≤ prerequisites.length ≤ 5000"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V+E)",
+      "explanation": "Use Kahn's algorithm (BFS) or DFS cycle detection to check if graph is acyclic."
+    }
+  },
+  {
+    "id": "valid-tree",
+    "number": 261,
+    "title": "Graph Valid Tree",
+    "difficulty": "Medium",
+    "acceptance": 0.41,
+    "tags": ["Graph", "Union-Find"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python"],
+    "statement": {
+      "content": "Given n nodes labeled from 0 to n-1 and a list of edges, check if it's a valid tree.",
+      "examples": [
+        { "input": "n=5, edges=[[0,1],[0,2],[0,3],[1,4]]", "output": "true" }
+      ],
+      "constraints": ["1 ≤ n ≤ 2000"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V+E)",
+      "explanation": "Check connectivity and ensure edges == nodes-1 using Union-Find or DFS."
+    }
+  },
+  {
+    "id": "clone-graph",
+    "number": 133,
+    "title": "Clone Graph",
+    "difficulty": "Medium",
+    "acceptance": 0.43,
+    "tags": ["Graph", "DFS", "BFS"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Clone an undirected graph. Each node contains a value and a list of neighbors.",
+      "examples": [
+        { "input": "adjList = [[2,4],[1,3],[2,4],[1,3]]", "output": "Cloned Graph" }
+      ],
+      "constraints": ["1 ≤ n ≤ 100"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(V+E)",
+      "spaceComplexity": "O(V)",
+      "explanation": "Use DFS or BFS with a hashmap mapping original nodes to cloned nodes."
+    }
+  },
+  {
+    "id": "word-ladder",
+    "number": 127,
+    "title": "Word Ladder",
+    "difficulty": "Hard",
+    "acceptance": 0.34,
+    "tags": ["Graph", "BFS"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return the length of shortest transformation sequence from beginWord to endWord.",
+      "examples": [
+        { "input": "beginWord = 'hit', endWord = 'cog', wordList = ['hot','dot','dog','lot','log','cog']", "output": "5" }
+      ],
+      "constraints": ["1 ≤ wordList.length ≤ 5000"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(N * L^2)",
+      "spaceComplexity": "O(N*L)",
+      "explanation": "Use BFS with intermediate pattern mapping to transform words efficiently."
+    }
+  },
+  {
+    "id": "reconstruct-itinerary",
+    "number": 332,
+    "title": "Reconstruct Itinerary",
+    "difficulty": "Hard",
+    "acceptance": 0.39,
+    "tags": ["Graph", "Eulerian Path"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Reconstruct itinerary from tickets such that it uses all tickets and is lexicographically smallest.",
+      "examples": [
+        { "input": "[[\"MUC\",\"LHR\"],[\"JFK\",\"MUC\"],[\"SFO\",\"SJC\"],[\"LHR\",\"SFO\"]]", "output": "[\"JFK\",\"MUC\",\"LHR\",\"SFO\",\"SJC\"]" }
+      ],
+      "constraints": ["1 ≤ tickets.length ≤ 300"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(E log E)",
+      "spaceComplexity": "O(E)",
+      "explanation": "Use Hierholzer’s algorithm with priority queues for lexicographic order."
+    }
+  },
+
+  {
+    "id": "pacific-atlantic-water-flow",
+    "number": 417,
+    "title": "Pacific Atlantic Water Flow",
+    "difficulty": "Medium",
+    "acceptance": 0.52,
+    "tags": ["DFS", "Graph", "Matrix"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return list of grid coordinates where water can flow to both Pacific and Atlantic ocean.",
+      "examples": [
+        { "input": "heights=[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]", "output": "[[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 200"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "Run DFS/BFS from both oceans. Cells visited by both are valid."
+    }
+  },
+  {
+    "id": "rotting-oranges",
+    "number": 994,
+    "title": "Rotting Oranges",
+    "difficulty": "Medium",
+    "acceptance": 0.51,
+    "tags": ["BFS", "Matrix"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find minimum minutes until no fresh orange remains, or -1 if impossible.",
+      "examples": [
+        { "input": "grid=[[2,1,1],[1,1,0],[0,1,1]]", "output": "4" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 10"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "Multi-source BFS from rotten oranges spreads infection layer by layer."
+    }
+  },
+  {
+    "id": "surrounded-regions",
+    "number": 130,
+    "title": "Surrounded Regions",
+    "difficulty": "Medium",
+    "acceptance": 0.38,
+    "tags": ["DFS", "Union-Find", "Matrix"],
+    "category": "Graph",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Capture all regions surrounded by 'X'.",
+      "examples": [
+        { "input": "board=[[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"O\",\"O\",\"X\"],[\"X\",\"X\",\"O\",\"X\"],[\"X\",\"O\",\"X\",\"X\"]]", "output": "[[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"X\",\"X\",\"X\"],[\"X\",\"O\",\"X\",\"X\"]]" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 200"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "Mark 'O's connected to boundary using DFS/BFS. Flip the rest."
+    }
+  },
+  {
+    "id": "longest-consecutive-sequence",
+    "number": 128,
+    "title": "Longest Consecutive Sequence",
+    "difficulty": "Medium",
+    "acceptance": 0.49,
+    "tags": ["Arrays", "HashSet"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Given unsorted array, return length of the longest consecutive sequence.",
+      "examples": [
+        { "input": "nums=[100,4,200,1,3,2]", "output": "4" }
+      ],
+      "constraints": ["0 ≤ n ≤ 10^5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Insert all nums into HashSet. Start counting only at sequence starts."
+    }
+  },
+  {
+    "id": "largest-rectangle-in-histogram",
+    "number": 84,
+    "title": "Largest Rectangle in Histogram",
+    "difficulty": "Hard",
+    "acceptance": 0.41,
+    "tags": ["Stack", "Monotonic Stack"],
+    "category": "Stack",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Given histogram bars, return area of largest rectangle.",
+      "examples": [
+        { "input": "heights=[2,1,5,6,2,3]", "output": "10" }
+      ],
+      "constraints": ["1 ≤ n ≤ 10^5"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use a monotonic stack to track indices of increasing bars."
+    }
+  },
+  {
+    "id": "maximal-rectangle",
+    "number": 85,
+    "title": "Maximal Rectangle",
+    "difficulty": "Hard",
+    "acceptance": 0.39,
+    "tags": ["Stack", "Matrix", "DP"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find largest rectangle containing only 1’s in a binary matrix.",
+      "examples": [
+        { "input": "matrix=[[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]", "output": "6" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 200"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Convert each row to histogram heights and apply Largest Rectangle in Histogram."
+    }
+  },
+  {
+    "id": "spiral-matrix",
+    "number": 54,
+    "title": "Spiral Matrix",
+    "difficulty": "Medium",
+    "acceptance": 0.44,
+    "tags": ["Matrix", "Simulation"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return all elements of the matrix in spiral order.",
+      "examples": [
+        { "input": "matrix=[[1,2,3],[4,5,6],[7,8,9]]", "output": "[1,2,3,6,9,8,7,4,5]" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 10"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Iteratively traverse layer by layer adjusting boundaries."
+    }
+  },
+  {
+    "id": "set-matrix-zeroes",
+    "number": 73,
+    "title": "Set Matrix Zeroes",
+    "difficulty": "Medium",
+    "acceptance": 0.50,
+    "tags": ["Matrix", "Simulation"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Modify matrix in-place such that if element is 0, set entire row and column to 0.",
+      "examples": [
+        { "input": "matrix=[[1,1,1],[1,0,1],[1,1,1]]", "output": "[[1,0,1],[0,0,0],[1,0,1]]" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 200"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use first row/col as markers. Handle separately for first row/col."
+    }
+  },
+  {
+    "id": "game-of-life",
+    "number": 289,
+    "title": "Game of Life",
+    "difficulty": "Medium",
+    "acceptance": 0.59,
+    "tags": ["Matrix", "Simulation"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Implement Conway’s Game of Life rules on the board.",
+      "examples": [
+        { "input": "board=[[0,1,0],[0,0,1],[1,1,1],[0,0,0]]", "output": "[[0,0,0],[1,0,1],[0,1,1],[0,1,0]]" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 25"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Use in-place encoding (e.g. -1 for dying, 2 for becoming alive)."
+    }
+  },
+  {
+    "id": "rotate-image",
+    "number": 48,
+    "title": "Rotate Image",
+    "difficulty": "Medium",
+    "acceptance": 0.67,
+    "tags": ["Matrix"],
+    "category": "Arrays",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Rotate an n x n 2D matrix by 90 degrees (clockwise).",
+      "examples": [
+        { "input": "matrix=[[1,2,3],[4,5,6],[7,8,9]]", "output": "[[7,4,1],[8,5,2],[9,6,3]]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 20"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Transpose then reverse each row in place."
+    }
+  },
+
+  
+  {
+    "id": "word-search",
+    "number": 79,
+    "title": "Word Search",
+    "difficulty": "Medium",
+    "acceptance": 0.40,
+    "tags": ["Backtracking", "Matrix"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Check if the word exists in the board using adjacent cells.",
+      "examples": [
+        { "input": "board=[[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word=\"ABCCED\"", "output": "true" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 6", "1 ≤ word.length ≤ 15"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n*4^L)",
+      "spaceComplexity": "O(L)",
+      "explanation": "Backtrack DFS from each cell, exploring neighbors. L = word length."
+    }
+  },
+  {
+    "id": "n-queens",
+    "number": 51,
+    "title": "N-Queens",
+    "difficulty": "Hard",
+    "acceptance": 0.44,
+    "tags": ["Backtracking"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Place n queens on an n×n board so that no two queens attack each other.",
+      "examples": [
+        { "input": "n=4", "output": "[[\".Q..\",\"...Q\",\"Q...\",\"..Q.\"],[\"..Q.\",\"Q...\",\"...Q\",\".Q..\"]]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 9"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n!)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Backtracking with column, diag, anti-diag sets to prune search."
+    }
+  },
+  {
+    "id": "sudoku-solver",
+    "number": 37,
+    "title": "Sudoku Solver",
+    "difficulty": "Hard",
+    "acceptance": 0.55,
+    "tags": ["Backtracking"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Solve the Sudoku puzzle by filling the empty cells.",
+      "examples": [
+        { "input": "board=[[\"5\",\"3\",\".\",\".\",\"7\",\".\",\".\",\".\",\".\"],[\"6\",\".\",\".\",\"1\",\"9\",\"5\",\".\",\".\",\".\"],[\".\",\"9\",\"8\",\".\",\".\",\".\",\".\",\"6\",\".\"]...]", "output": "[[\"5\",\"3\",\"4\",\"6\",\"7\",\"8\",\"9\",\"1\",\"2\"],...]" }
+      ],
+      "constraints": ["board.length == 9", "board[i].length == 9"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(9^m)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Backtracking with row, col, box constraints to prune."
+    }
+  },
+  {
+    "id": "combination-sum",
+    "number": 39,
+    "title": "Combination Sum",
+    "difficulty": "Medium",
+    "acceptance": 0.63,
+    "tags": ["Backtracking"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find all unique combinations where candidates sum to target.",
+      "examples": [
+        { "input": "candidates=[2,3,6,7], target=7", "output": "[[2,2,3],[7]]" }
+      ],
+      "constraints": ["1 ≤ candidates.length ≤ 30"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(2^t)",
+      "spaceComplexity": "O(t)",
+      "explanation": "DFS backtracking tries including/excluding each candidate. t = target."
+    }
+  },
+  {
+    "id": "letter-combinations-phone",
+    "number": 17,
+    "title": "Letter Combinations of a Phone Number",
+    "difficulty": "Medium",
+    "acceptance": 0.55,
+    "tags": ["Backtracking"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return all letter combinations that the number could represent.",
+      "examples": [
+        { "input": "digits=\"23\"", "output": "[\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]" }
+      ],
+      "constraints": ["0 ≤ digits.length ≤ 4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(4^n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Backtrack over digits, mapping to possible letters."
+    }
+  },
+  {
+    "id": "subsets",
+    "number": 78,
+    "title": "Subsets",
+    "difficulty": "Medium",
+    "acceptance": 0.74,
+    "tags": ["Backtracking", "Bitmask"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return all possible subsets of nums.",
+      "examples": [
+        { "input": "nums=[1,2,3]", "output": "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 10"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(2^n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Backtracking generates each subset. Alternative: bitmask from 0..2^n-1."
+    }
+  },
+  {
+    "id": "permutations",
+    "number": 46,
+    "title": "Permutations",
+    "difficulty": "Medium",
+    "acceptance": 0.74,
+    "tags": ["Backtracking"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return all permutations of nums.",
+      "examples": [
+        { "input": "nums=[1,2,3]", "output": "[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]" }
+      ],
+      "constraints": ["1 ≤ n ≤ 6"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n*n!)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Backtracking generates all permutations by swapping or visited set."
+    }
+  },
+  {
+    "id": "palindrome-partitioning",
+    "number": 131,
+    "title": "Palindrome Partitioning",
+    "difficulty": "Medium",
+    "acceptance": 0.63,
+    "tags": ["Backtracking", "DP"],
+    "category": "Backtracking",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Partition string into all possible palindrome substrings.",
+      "examples": [
+        { "input": "s=\"aab\"", "output": "[[\"a\",\"a\",\"b\"],[\"aa\",\"b\"]]" }
+      ],
+      "constraints": ["1 ≤ |s| ≤ 16"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n*2^n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Backtracking explores cuts, with DP to check palindrome in O(1)."
+    }
+  },
+  {
+    "id": "word-break",
+    "number": 139,
+    "title": "Word Break",
+    "difficulty": "Medium",
+    "acceptance": 0.46,
+    "tags": ["DP"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return true if string can be segmented into dictionary words.",
+      "examples": [
+        { "input": "s=\"leetcode\", wordDict=[\"leet\",\"code\"]", "output": "true" }
+      ],
+      "constraints": ["1 ≤ |s| ≤ 300"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n^2)",
+      "spaceComplexity": "O(n)",
+      "explanation": "DP: dp[i] = true if s[:i] can be segmented using words."
+    }
+  },
+  {
+    "id": "longest-increasing-subsequence",
+    "number": 300,
+    "title": "Longest Increasing Subsequence",
+    "difficulty": "Medium",
+    "acceptance": 0.52,
+    "tags": ["DP", "Binary Search"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return length of longest strictly increasing subsequence.",
+      "examples": [
+        { "input": "nums=[10,9,2,5,3,7,101,18]", "output": "4" }
+      ],
+      "constraints": ["1 ≤ n ≤ 2500"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n log n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Use patience sorting with binary search to track smallest tails."
+    }
+  },
+
+
+  {
+    "id": "coin-change",
+    "number": 322,
+    "title": "Coin Change",
+    "difficulty": "Medium",
+    "acceptance": 0.42,
+    "tags": ["DP"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return the fewest number of coins to make up that amount, or -1 if not possible.",
+      "examples": [
+        { "input": "coins=[1,2,5], amount=11", "output": "3" }
+      ],
+      "constraints": ["1 ≤ coins.length ≤ 12", "1 ≤ amount ≤ 10^4"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n*amount)",
+      "spaceComplexity": "O(amount)",
+      "explanation": "Classic DP: dp[i] = min coins to make amount i."
+    }
+  },
+  {
+    "id": "climbing-stairs",
+    "number": 70,
+    "title": "Climbing Stairs",
+    "difficulty": "Easy",
+    "acceptance": 0.65,
+    "tags": ["DP"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "You are climbing a staircase. Each time you can climb 1 or 2 steps. Return number of ways to reach the top.",
+      "examples": [
+        { "input": "n=2", "output": "2" }
+      ],
+      "constraints": ["1 ≤ n ≤ 45"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "Fibonacci relation: f(n) = f(n-1) + f(n-2)."
+    }
+  },
+  {
+    "id": "house-robber",
+    "number": 198,
+    "title": "House Robber",
+    "difficulty": "Medium",
+    "acceptance": 0.49,
+    "tags": ["DP"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return max amount of money you can rob without robbing adjacent houses.",
+      "examples": [
+        { "input": "nums=[1,2,3,1]", "output": "4" }
+      ],
+      "constraints": ["1 ≤ n ≤ 100"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(n)",
+      "spaceComplexity": "O(1)",
+      "explanation": "DP with rolling array: dp[i] = max(dp[i-1], dp[i-2]+nums[i])."
+    }
+  },
+  {
+    "id": "edit-distance",
+    "number": 72,
+    "title": "Edit Distance",
+    "difficulty": "Hard",
+    "acceptance": 0.50,
+    "tags": ["DP"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Return min operations to convert word1 to word2 (insert, delete, replace).",
+      "examples": [
+        { "input": "word1=\"horse\", word2=\"ros\"", "output": "3" }
+      ],
+      "constraints": ["1 ≤ |word1|,|word2| ≤ 500"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(m*n)",
+      "explanation": "DP matrix where dp[i][j] = edit distance of prefixes word1[0..i), word2[0..j)."
+    }
+  },
+  {
+    "id": "maximal-rectangle",
+    "number": 85,
+    "title": "Maximal Rectangle",
+    "difficulty": "Hard",
+    "acceptance": 0.42,
+    "tags": ["DP", "Stack"],
+    "category": "DP",
+    "languages": ["cpp", "java", "python", "javascript"],
+    "statement": {
+      "content": "Find the area of the largest rectangle containing only 1’s in a binary matrix.",
+      "examples": [
+        { "input": "matrix=[[\"1\",\"0\",\"1\",\"0\",\"0\"],[\"1\",\"0\",\"1\",\"1\",\"1\"],[\"1\",\"1\",\"1\",\"1\",\"1\"],[\"1\",\"0\",\"0\",\"1\",\"0\"]]", "output": "6" }
+      ],
+      "constraints": ["1 ≤ m,n ≤ 200"]
+    },
+    "optimalSolution": {
+      "timeComplexity": "O(m*n)",
+      "spaceComplexity": "O(n)",
+      "explanation": "Treat each row as histogram and compute largest rectangle using stack."
+    }
+  }
+]
+
+
+
+
+

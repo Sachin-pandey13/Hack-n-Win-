@@ -1,0 +1,622 @@
+// lib/playlists.ts
+
+/* ────────────────────────────────────────────────────────────────
+   Types
+──────────────────────────────────────────────────────────────── */
+export type Language = "English" | "Hindi" | "Mixed";
+export type Level = "Beginner" | "Intermediate" | "Advanced";
+
+export type Category = "Curriculum" | "Technical" | "Project" | "Trending";
+
+export type Playlist = {
+  id: string;
+  title: string;
+  provider: string;
+  /** Multiple tags (Arrays, Strings, DP, …) */
+  topics: string[];
+  language: Language;
+  level: Level;
+  description: string;
+  /** YouTube content reference */
+  youtube:
+    | { kind: "playlist"; playlistId: string }
+    | { kind: "video"; videoId: string };
+  /** Optional card art */
+  thumbnail?: string;
+
+  // NEW optional fields used by Explore page
+  category?: Category;
+  stream?: string | null; // e.g. "CSE", "ECE", "EE", ...
+  subject?: string | null; // e.g. "Database Management Systems"
+  prominence?: number; // 0..100 - optional ranking for "most prominent" items
+};
+
+/* ────────────────────────────────────────────────────────────────
+   Filters / chips
+──────────────────────────────────────────────────────────────── */
+export const TOPICS: string[] = [
+  "Arrays",
+  "Strings",
+  "Sorting",
+  "Searching",
+  "Two Pointers",
+  "Binary Search",
+  "Hashing",
+  "Stacks",
+  "Queues",
+  "Linked List",
+  "Trees",
+  "Graphs",
+  "Greedy",
+  "Backtracking",
+  "Recursion",
+  "Dynamic Programming",
+  "Math",
+  "Bit Manipulation",
+
+  // Extras for your new playlists / filters
+  "Java",
+  "Python",
+  "C++",
+  "Web Development",
+  "Frontend",
+  "Backend",
+  "Full Stack",
+  "Projects",
+  "AI",
+  "GenAI",
+  "Machine Learning",
+  "DSA",
+  "OOP",
+  "DBMS",
+  "Computer Networks",
+  "Operating Systems",
+  "Compiler Design",
+  "Signals",
+  "Control Systems",
+];
+
+/* ────────────────────────────────────────────────────────────────
+   Providers
+──────────────────────────────────────────────────────────────── */
+export const PROVIDERS: string[] = [
+  "Striver",
+  "Apna College",
+  "freeCodeCamp",
+  "NeetCode",
+  "CodeWithHarry",
+  "Tube Guruji",
+  "CodeBasics",
+  "Gate Smashers",
+  "Neso Academy",
+  "Jenny's Lectures",
+  "Kunal Kushwaha",
+  "MathTheBeautiful",
+  "DeepLearning.AI",
+  "Krish Naik",
+  "StatQuest",
+  "NPTEL",
+  "MIT OCW",
+  "All About Electronics",
+  "Learn Engineering",
+  "Civil Mentors",
+];
+
+/* ────────────────────────────────────────────────────────────────
+   PLAYLISTS (seeded library)
+   Replace PLACEHOLDER_PLAYLIST_ID_* with real playlist/video IDs when ready.
+──────────────────────────────────────────────────────────────── */
+export const PLAYLISTS: Playlist[] = [
+  // -------------------- Curriculum: Common / Math / Physics --------------------
+  {
+    id: "neso-engineering-maths",
+    title: "Neso Academy — Engineering Mathematics",
+    provider: "Neso Academy",
+    topics: ["Math", "Signals", "Calculus", "Linear Algebra"],
+    language: "English",
+    level: "Intermediate",
+    description: "Complete engineering mathematics (calculus, linear algebra, transforms) for semester and GATE preparation.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_NESO_MATHS" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Mathematics",
+    prominence: 90,
+  },
+  {
+    id: "math-the-beautiful-advanced-math",
+    title: "MathTheBeautiful — Advanced Math for Engineering & AI",
+    provider: "MathTheBeautiful",
+    topics: ["Math", "Linear Algebra", "Probability", "Statistics"],
+    language: "English",
+    level: "Advanced",
+    description: "Advanced mathematics for AI, ML and higher engineering concepts.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_MTBEAUTIFUL" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Mathematics",
+    prominence: 80,
+  },
+  {
+    id: "gate-smashers-maths-physics",
+    title: "Gate Smashers — Maths & Core Subjects",
+    provider: "Gate Smashers",
+    topics: ["Math", "DBMS", "CN", "OS", "Compiler Design"],
+    language: "Hindi",
+    level: "Intermediate",
+    description: "Short, focused lectures covering multiple core engineering subjects for semester and GATE.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_GATE_SMASHERS_CORE" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Mixed Core Subjects",
+    prominence: 85,
+  },
+
+  // -------------------- Curriculum: CSE Core Subjects --------------------
+  {
+    id: "striver-a2z-dsa",
+    title: "Striver — A2Z DSA Course",
+    provider: "Striver",
+    topics: ["Arrays", "Graphs", "Dynamic Programming", "Recursion", "DSA"],
+    language: "English",
+    level: "Advanced",
+    description: "Comprehensive A2Z DSA course covering patterns, problem-solving and tricks.",
+    youtube: { kind: "playlist", playlistId: "PLgUwDviBIf0oF6QL8m22w1hIDC1vJ_BHz" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Data Structures & Algorithms",
+    prominence: 100,
+  },
+  {
+    id: "neetcode-graphs",
+    title: "NeetCode — Graphs Roadmap",
+    provider: "NeetCode",
+    topics: ["Graphs", "BFS", "DFS", "Union-Find", "DSA"],
+    language: "English",
+    level: "Intermediate",
+    description: "Precise, pattern-focused graph problems and solutions.",
+    youtube: { kind: "playlist", playlistId: "PLot-Xpze53ldBT_7QA8NVot219jFNr_GI" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Computer Networks & Graphs",
+    prominence: 90,
+  },
+  {
+    id: "jennys-dbms",
+    title: "Jenny's Lectures — DBMS",
+    provider: "Jenny's Lectures",
+    topics: ["DBMS", "Databases", "SQL"],
+    language: "English",
+    level: "Intermediate",
+    description: "DBMS core concepts: ER models, normalization, SQL, transactions.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_JENNY_DBMS" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Database Management Systems",
+    prominence: 90,
+  },
+  {
+    id: "os-gate-smashers",
+    title: "Gate Smashers — Operating Systems",
+    provider: "Gate Smashers",
+    topics: ["Operating Systems", "Concurrency", "Processes"],
+    language: "Hindi",
+    level: "Intermediate",
+    description: "Operating systems lectures tailored for semester and GATE-level clarity.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_GATE_OS" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Operating Systems",
+    prominence: 85,
+  },
+  {
+    id: "compiler-design-gatesmashers",
+    title: "Gate Smashers — Compiler Design",
+    provider: "Gate Smashers",
+    topics: ["Compiler Design", "Theory", "Parsing"],
+    language: "Hindi",
+    level: "Intermediate",
+    description: "Compiler design key topics: lexical analysis, parsing, code generation.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_GATE_COMPILER" },
+    category: "Curriculum",
+    stream: "CSE",
+    subject: "Compiler Design",
+    prominence: 70,
+  },
+
+  // -------------------- Technical: Languages & Full Courses --------------------
+  {
+    id: "codewithharry-python-full",
+    title: "CodeWithHarry — Python Full Course",
+    provider: "CodeWithHarry",
+    topics: ["Python", "Programming", "Projects"],
+    language: "Hindi",
+    level: "Beginner",
+    description: "Complete Python tutorials and hands-on projects in Hindi.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_HARRY_PY" },
+    category: "Technical",
+    stream: null,
+    subject: "Python",
+    prominence: 95,
+  },
+  {
+    id: "apna-java-full",
+    title: "Apna College — Java Full Course",
+    provider: "Apna College",
+    topics: ["Java", "OOP", "Backend"],
+    language: "Hindi",
+    level: "Beginner",
+    description: "Complete Java course covering OOP concepts and practical examples.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_APNA_JAVA" },
+    category: "Technical",
+    stream: null,
+    subject: "Java",
+    prominence: 85,
+  },
+  {
+    id: "striver-cpp-oneshot",
+    title: "Striver — C++ One Shot",
+    provider: "Striver",
+    topics: ["C++", "DSA"],
+    language: "English",
+    level: "Beginner",
+    description: "A compact one-shot for essential C++ concepts used in DSA.",
+    youtube: { kind: "video", videoId: "PLACEHOLDER_VIDEO_ID_STRIVER_CPP" },
+    category: "Technical",
+    stream: null,
+    subject: "C++",
+    prominence: 80,
+  },
+
+  // -------------------- Technical: Web Development & Full Stack --------------------
+  {
+    id: "freecode-fullstack",
+    title: "freeCodeCamp.org — Full Stack Web Development",
+    provider: "freeCodeCamp",
+    topics: ["Web Development", "Frontend", "Backend", "Full Stack", "Projects"],
+    language: "English",
+    level: "Beginner",
+    description: "Full-length, structured web dev courses: HTML, CSS, JS, Node, databases and projects.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_FCC_FULLSTACK" },
+    category: "Technical",
+    stream: null,
+    subject: "Web Development",
+    prominence: 98,
+  },
+  {
+    id: "codewithharry-webdev",
+    title: "CodeWithHarry — Web Development Series",
+    provider: "CodeWithHarry",
+    topics: ["Web Development", "Frontend", "Backend"],
+    language: "Hindi",
+    level: "Beginner",
+    description: "Step-by-step web dev tutorials and small projects in Hindi.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_HARRY_WEB" },
+    category: "Technical",
+    stream: null,
+    subject: "Web Development",
+    prominence: 90,
+  },
+  {
+    id: "tubeguruji-fullstack-projects",
+    title: "Tube Guruji — Full Stack Projects",
+    provider: "Tube Guruji",
+    topics: ["Full Stack", "Projects", "Frontend", "Backend"],
+    language: "Hindi",
+    level: "Intermediate",
+    description: "Project-focused tutorials for practical full-stack skills.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_TG_FULLSTACK" },
+    category: "Project",
+    stream: null,
+    subject: "Full Stack Projects",
+    prominence: 75,
+  },
+
+  // -------------------- Trending & AI / Data Science --------------------
+  {
+    id: "freecode-ai-ml",
+    title: "freeCodeCamp.org — Machine Learning & AI",
+    provider: "freeCodeCamp",
+    topics: ["AI", "Machine Learning", "Deep Learning", "Projects"],
+    language: "English",
+    level: "Intermediate",
+    description: "Full-length courses covering ML fundamentals, neural networks and practical projects.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_FCC_ML" },
+    category: "Trending",
+    stream: null,
+    subject: "Machine Learning",
+    prominence: 95,
+  },
+  {
+    id: "deeplearning-ai-coursera",
+    title: "DeepLearning.AI — Deep Learning Courses",
+    provider: "DeepLearning.AI",
+    topics: ["Deep Learning", "Neural Networks", "AI"],
+    language: "English",
+    level: "Advanced",
+    description: "Specialized deep learning content from DeepLearning.AI (Andrew Ng).",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_DL_AI" },
+    category: "Trending",
+    stream: null,
+    subject: "Deep Learning",
+    prominence: 92,
+  },
+  {
+    id: "krishnaik-ml",
+    title: "Krish Naik — Machine Learning & Data Science",
+    provider: "Krish Naik",
+    topics: ["Machine Learning", "Data Science", "Projects"],
+    language: "English",
+    level: "Intermediate",
+    description: "Practical ML & DS projects, end-to-end tutorials and deployments.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_KRISH_NAIK" },
+    category: "Trending",
+    stream: null,
+    subject: "Data Science",
+    prominence: 85,
+  },
+  {
+    id: "statquest",
+    title: "StatQuest with Josh Starmer — Statistics for ML",
+    provider: "StatQuest",
+    topics: ["Statistics", "Probability", "Machine Learning"],
+    language: "English",
+    level: "Intermediate",
+    description: "Crystal-clear explanations for statistics and ML fundamentals.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_STATQUEST" },
+    category: "Trending",
+    stream: null,
+    subject: "Statistics",
+    prominence: 90,
+  },
+
+  // -------------------- Curriculum: ECE / Signals / Communications --------------------
+  {
+    id: "neso-signals-systems",
+    title: "Neso Academy — Signals & Systems",
+    provider: "Neso Academy",
+    topics: ["Signals", "Systems", "Transforms"],
+    language: "English",
+    level: "Intermediate",
+    description: "Signals & Systems core topics for ECE students.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_NESO_SIGNALS" },
+    category: "Curriculum",
+    stream: "ECE",
+    subject: "Signals & Systems",
+    prominence: 85,
+  },
+  {
+    id: "all-about-electronics-edc",
+    title: "All About Electronics — Digital & Analog Circuits",
+    provider: "All About Electronics",
+    topics: ["Digital Electronics", "Analog Circuits", "VLSI", "Embedded"],
+    language: "English",
+    level: "Intermediate",
+    description: "Strong basics for electronic circuits and EDC topics.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_AAE_EDC" },
+    category: "Curriculum",
+    stream: "ECE",
+    subject: "Digital & Analog Electronics",
+    prominence: 80,
+  },
+
+  // -------------------- Curriculum: EE / Power & Machines --------------------
+  {
+    id: "engineering-mindset-power",
+    title: "The Engineering Mindset — Power Systems & Machines",
+    provider: "The Engineering Mindset",
+    topics: ["Power Systems", "Electrical Machines", "Control Systems"],
+    language: "English",
+    level: "Intermediate",
+    description: "Practical explanations of electrical machines and power system concepts.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_ENG_MINDSET" },
+    category: "Curriculum",
+    stream: "EE",
+    subject: "Power Systems",
+    prominence: 80,
+  },
+
+  // -------------------- Curriculum: ME / Thermo / Strength --------------------
+  {
+    id: "learn-engineering-mech",
+    title: "Learn Engineering — Mechanical Engineering Concepts",
+    provider: "Learn Engineering",
+    topics: ["Thermodynamics", "Strength of Materials", "Fluid Mechanics"],
+    language: "English",
+    level: "Intermediate",
+    description: "Animated and practical explanations for mechanical engineering concepts.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_LEARN_ENG_MECH" },
+    category: "Curriculum",
+    stream: "ME",
+    subject: "Mechanics & Thermo",
+    prominence: 82,
+  },
+
+  // -------------------- Curriculum: CE / Civil --------------------
+  {
+    id: "civil-mentors-structural",
+    title: "Civil Mentors — Structural & RCC",
+    provider: "Civil Mentors",
+    topics: ["Structural Analysis", "RCC", "Surveying"],
+    language: "English",
+    level: "Intermediate",
+    description: "Civil engineering subject walkthroughs for semesters and GATE.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_CIVIL_MENTORS" },
+    category: "Curriculum",
+    stream: "CE",
+    subject: "Structural Engineering",
+    prominence: 78,
+  },
+
+  // -------------------- Technical: System Design / Open Source / DevOps --------------------
+  {
+    id: "kunal-kushwaha-dsa-os",
+    title: "Kunal Kushwaha — DSA, Open Source & System Design",
+    provider: "Kunal Kushwaha",
+    topics: ["DSA", "System Design", "Open Source", "DevOps"],
+    language: "English",
+    level: "Intermediate",
+    description: "DSA, system design foundations and contributor-friendly open source guides.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_KUNAL" },
+    category: "Technical",
+    stream: null,
+    subject: "System Design & Open Source",
+    prominence: 75,
+  },
+
+  // -------------------- Projects: Web / ML Project Playlists --------------------
+  {
+    id: "projects-web-simple",
+    title: "Project Tutorials — Web Projects for Beginners",
+    provider: "Tube Guruji",
+    topics: ["Projects", "Web Development", "Frontend"],
+    language: "Hindi",
+    level: "Beginner",
+    description: "Small web projects to practice HTML/CSS/JS and build portfolio items.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_TG_WEB_PROJECTS" },
+    category: "Project",
+    stream: null,
+    subject: "Web Projects",
+    prominence: 70,
+  },
+  {
+    id: "genai-codebasics",
+    title: "CodeBasics — Generative AI Projects",
+    provider: "CodeBasics",
+    topics: ["AI", "GenAI", "Projects"],
+    language: "English",
+    level: "Intermediate",
+    description: "Generative AI concepts with project-based tutorials and datasets.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_CODEBASICS_GENAI" },
+    category: "Project",
+    stream: null,
+    subject: "Generative AI Projects",
+    prominence: 85,
+  },
+
+  // -------------------- Curriculum: Seminar / Extra Resources --------------------
+  {
+    id: "nptel-ocw-collection",
+    title: "NPTEL & MIT OCW — Advanced Course Collection",
+    provider: "NPTEL",
+    topics: ["Advanced", "Courses", "Fluid Mechanics", "Control Systems"],
+    language: "English",
+    level: "Advanced",
+    description: "University-level full courses from NPTEL and MIT OCW for deeper study.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_NPTEL" },
+    category: "Curriculum",
+    stream: null,
+    subject: "Advanced Courses",
+    prominence: 88,
+  },
+
+  // -------------------- Interview / Problem solving playlists --------------------
+  {
+    id: "neetcode-interview",
+    title: "NeetCode — Top Interview Questions",
+    provider: "NeetCode",
+    topics: ["Interview", "DSA", "Problem Solving"],
+    language: "English",
+    level: "Intermediate",
+    description: "Most commonly asked interview problems and patterns explained clearly.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_NEETCODE_INTERVIEW" },
+    category: "Technical",
+    stream: null,
+    subject: "Interview Preparation",
+    prominence: 95,
+  },
+
+  // -------------------- Small / useful single lecture videos --------------------
+  {
+    id: "statquest-probability",
+    title: "StatQuest — Probability Basics",
+    provider: "StatQuest",
+    topics: ["Probability", "Statistics"],
+    language: "English",
+    level: "Beginner",
+    description: "Short, crystal-clear videos explaining probability concepts essential for ML.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_STATQUEST_PROB" },
+    category: "Trending",
+    stream: null,
+    subject: "Probability & Statistics",
+    prominence: 88,
+  },
+
+  // -------------------- Placeholder / your previous entries preserved --------------------
+  {
+    id: "striver-arrays",
+    title: "Striver – Arrays Mastery",
+    provider: "Striver",
+    topics: ["Arrays", "Two Pointers", "Hashing", "DSA"],
+    language: "English",
+    level: "Beginner",
+    description:
+      "Hand-picked array problems and techniques by Striver: basics → tricks → patterns.",
+    youtube: { kind: "playlist", playlistId: "PLgUwDviBIf0rGEWe64KWas0Nryn7SCRWw" },
+    category: "Technical",
+    stream: null,
+    subject: "Arrays",
+    prominence: 90,
+  },
+  {
+    id: "striver-strings",
+    title: "Striver – Strings Deep Dive",
+    provider: "Striver",
+    topics: ["Strings", "Hashing", "DSA"],
+    language: "English",
+    level: "Intermediate",
+    description:
+      "From fundamentals to advanced string algorithms and pattern problems.",
+    youtube: { kind: "playlist", playlistId: "PLRqx6ovL6UYY7XhXAvBucNcnBOfPa6UOC" },
+    category: "Technical",
+    stream: null,
+    subject: "Strings",
+    prominence: 88,
+  },
+  {
+    id: "striver-dp",
+    title: "Striver – Dynamic Programming",
+    provider: "Striver",
+    topics: ["Dynamic Programming", "Recursion", "DP", "DSA"],
+    language: "English",
+    level: "Intermediate",
+    description:
+      "A structured DP roadmap: recursion, memoization, tabulation, patterns.",
+    youtube: { kind: "playlist", playlistId: "PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY" },
+    category: "Technical",
+    stream: null,
+    subject: "Dynamic Programming",
+    prominence: 94,
+  },
+
+  // -------------------- Extra: helpful single-topic courses --------------------
+  {
+    id: "codebasics-genai-intro",
+    title: "CodeBasics — Generative AI Intro",
+    provider: "CodeBasics",
+    topics: ["GenAI", "AI", "Python", "Projects"],
+    language: "English",
+    level: "Beginner",
+    description: "Beginner-friendly generative AI tutorials and small projects.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_CODEBASICS_GENAI2" },
+    category: "Trending",
+    stream: null,
+    subject: "Generative AI",
+    prominence: 82,
+  },
+
+  // final placeholder to allow expansion
+  {
+    id: "placeholder-more-to-add",
+    title: "More playlists will be added",
+    provider: "Community",
+    topics: ["Projects"],
+    language: "English",
+    level: "Beginner",
+    description: "Placeholder entry. Replace with more playlists for other branches and elective subjects.",
+    youtube: { kind: "playlist", playlistId: "PLACEHOLDER_PLAYLIST_ID_FILL" },
+    category: "Curriculum",
+    stream: null,
+    subject: null,
+    prominence: 10,
+  },
+];

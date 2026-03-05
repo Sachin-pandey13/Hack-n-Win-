@@ -1,0 +1,14 @@
+{
+  "id": "arts-patterns",
+  "title": { "en": "Patterns & Symmetry", "hi": "पैटर्न और समरूपता" },
+  "grade": "6-9",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Patterns appear in art and nature. Symmetry is balanced repetition." },
+      { "type": "image", "value": "/offline-content/assets/arts-patterns.svg" },
+      { "type": "exercise", "prompt": "Draw or imagine a symmetric pattern using shapes." }
+    ]
+  },
+  "assets": ["/offline-content/assets/arts-patterns.svg"],
+  "meta": { "points": 8, "badge": "pattern-pro" }
+}

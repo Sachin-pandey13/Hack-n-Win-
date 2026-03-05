@@ -1,0 +1,13 @@
+{
+  "id": "math-probability",
+  "title": { "en": "Probability Puzzles", "hi": "संभाव्यता पहेलियाँ" },
+  "grade": "9-12",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Probability tells how likely an event is. Example: probability of heads on a fair coin = 1/2." },
+      { "type": "quiz", "question": "If you roll a 6-sided die, what's the probability of getting a 3?", "options": ["1/6", "1/3"], "answer": 0 }
+    ]
+  },
+  "assets": [],
+  "meta": { "points": 15, "badge": "probability-pro" }
+}

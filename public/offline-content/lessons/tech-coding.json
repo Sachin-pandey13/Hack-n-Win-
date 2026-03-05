@@ -1,0 +1,14 @@
+{
+  "id": "tech-coding",
+  "title": { "en": "Coding Logic Games", "hi": "कोडिंग लॉजिक गेम" },
+  "grade": "9-12",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Coding is logic and steps. A simple program repeats tasks." },
+      { "type": "exercise", "prompt": "If you want to repeat 3 times, which loop is helpful? (Answer: for loop)" },
+      { "type": "quiz", "question": "Which is a conditional statement?", "options": ["if", "repeat"], "answer": 0 }
+    ]
+  },
+  "assets": [],
+  "meta": { "points": 15, "badge": "code-cadet" }
+}

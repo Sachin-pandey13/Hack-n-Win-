@@ -1,0 +1,15 @@
+{
+  "id": "science-humanbody",
+  "title": { "en": "Human Body Basics", "hi": "मानव शरीर के मूल बातें" },
+  "grade": "6-8",
+  "content": {
+    "en": [
+      { "type": "text", "value": "The human body has systems: circulatory, respiratory, digestive, and nervous." },
+      { "type": "image", "value": "/offline-content/assets/science-humanbody.svg" },
+      { "type": "story", "value": "Arjun learned how his heart pumps blood when he ran during sports day." },
+      { "type": "quiz", "question": "Which organ pumps blood?", "options": ["Lungs", "Heart"], "answer": 1 }
+    ]
+  },
+  "assets": ["/offline-content/assets/science-humanbody.svg"],
+  "meta": { "points": 10, "badge": "health-hunter" }
+}

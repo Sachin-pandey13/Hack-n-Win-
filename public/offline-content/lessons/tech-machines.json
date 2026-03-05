@@ -1,0 +1,14 @@
+{
+  "id": "tech-machines",
+  "title": { "en": "Simple Machines", "hi": "सरल मशीनें" },
+  "grade": "7-10",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Simple machines like levers and pulleys make work easier." },
+      { "type": "image", "value": "/offline-content/assets/tech-machines.svg" },
+      { "type": "quiz", "question": "Which is a simple machine?", "options": ["Lever", "Light bulb"], "answer": 0 }
+    ]
+  },
+  "assets": ["/offline-content/assets/tech-machines.svg"],
+  "meta": { "points": 12, "badge": "machine-mate" }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "math-fractions",
+  "title": { "en": "Fun with Fractions", "hi": "भिन्न के साथ मज़ा" },
+  "grade": "6-9",
+  "content": {
+    "en": [
+      { "type": "text", "value": "A fraction shows a part of a whole. Example: 3/4 means 3 parts of 4 equal parts." },
+      { "type": "image", "value": "/offline-content/assets/math-fractions.svg" },
+      { "type": "story", "value": "Priya shared 3 of 4 apples with friends — that's 3/4." },
+      { "type": "quiz", "question": "Which is larger? 3/4 or 2/3?", "options": ["3/4", "2/3"], "answer": 0 }
+    ]
+  },
+  "assets": ["/offline-content/assets/math-fractions.svg"],
+  "meta": { "points": 8, "badge": "fraction-friend" }
+}

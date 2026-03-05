@@ -1,0 +1,19 @@
+{
+  "id": "science-energy",
+  "title": { "en": "Forms of Energy", "hi": "ऊर्जा के प्रकार" },
+  "grade": "6-8",
+  "content": {
+    "en": [
+      { "type": "text", "value": "Energy is the ability to do work. It comes in many forms — kinetic, potential, thermal, chemical, and light." },
+      { "type": "image", "value": "/offline-content/assets/science-energy.svg" },
+      { "type": "story", "value": "Imagine lifting a bucket of water — when you lift it, you give it potential energy. When it falls, that energy becomes kinetic." },
+      { "type": "quiz", "question": "Which is kinetic energy?", "options": ["A parked car", "A rolling ball"], "answer": 1 },
+      { "type": "exercise", "prompt": "Name one form of energy you see at home." }
+    ],
+    "hi": [
+      { "type": "text", "value": "ऊर्जा काम करने की क्षमता है। यह कई रूपों में आती है - काइनेटिक, पोटेंशियल, तापीय, रासायनिक और प्रकाश।" }
+    ]
+  },
+  "assets": ["/offline-content/assets/science-energy.svg"],
+  "meta": { "points": 10, "badge": "energy-explorer" }
+}

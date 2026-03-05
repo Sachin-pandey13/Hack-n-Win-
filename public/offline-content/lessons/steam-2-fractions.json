@@ -1,0 +1,16 @@
+{
+  "id": "steam-2-fractions",
+  "title": { "en": "Fun with Fractions", "hi": "भिन्न के साथ मज़ा" },
+  "grade": "7",
+  "content": {
+    "en": [
+      { "type": "text", "value": "A fraction has a numerator and denominator. E.g., 1/2 means one out of two equal parts." },
+      { "type": "exercise", "prompt": "Which is larger? 3/4 or 2/3", "answer": "3/4" }
+    ],
+    "hi": [
+      { "type": "text", "value": "एक भिन्न में एक numerator और एक denominator होता है। उदाहरण: 1/2 का मतलब है दो में से एक भाग।" }
+    ]
+  },
+  "assets": ["/offline-content/assets/fractions.svg"],
+  "meta": { "points": 8, "badge": "fraction-friend" }
+}
