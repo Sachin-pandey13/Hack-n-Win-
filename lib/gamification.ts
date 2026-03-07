@@ -13,7 +13,7 @@ const defaultProgress: Progress = {
   xp: 0,
   level: 1,
   badges: [],
-  streak: 0,
+  streak: 10,
   lastActive: null,
 };
 
