@@ -1,7 +1,9 @@
+
+@import "hover.css/css/hover-min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "hover.css/css/hover-min.css";
+
 
 
 
