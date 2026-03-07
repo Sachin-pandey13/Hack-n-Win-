@@ -1,54 +1,35 @@
-// lib/mongodb.ts
-import { MongoClient } from "mongodb";
+import { MongoClient } from "mongodb"
 
-const uri = process.env.MONGODB_URI as string;
-const dbName = process.env.MONGODB_DB || "codeelysium";
+const uri = process.env.MONGODB_URI as string
+const options = {}
 
-if (!uri) {
-  throw new Error("Missing MONGODB_URI in env");
-}
+let client: MongoClient
+let clientPromise: Promise<MongoClient>
 
-const options = {
-  // leave defaults; serverSelectionTimeoutMS helps fail fast
-  serverSelectionTimeoutMS: 8000,
-};
-
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-declare global {
-  // eslint-disable-next-line no-var
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
+if (!process.env.MONGODB_URI) {
+  throw new Error("Please add MONGODB_URI to .env.local")
 }
 
 if (process.env.NODE_ENV === "development") {
-  if (!global._mongoClientPromise) {
-    console.log("→ mongodb: creating new clientPromise (dev)");
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client
-      .connect()
-      .then((c) => {
-        console.log(`✅ mongodb: connected to ${dbName}`);
-        return c;
-      })
-      .catch((err) => {
-        console.error("❌ mongodb: connection failed", err);
-        throw err;
-      });
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>
   }
-  clientPromise = global._mongoClientPromise;
+
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options)
+    globalWithMongo._mongoClientPromise = client.connect()
+    console.log("→ mongodb: creating new clientPromise (dev)")
+  }
+
+  clientPromise = globalWithMongo._mongoClientPromise
 } else {
-  client = new MongoClient(uri, options);
-  clientPromise = client
-    .connect()
-    .then((c) => {
-      console.log(`✅ mongodb: connected to ${dbName}`);
-      return c;
-    })
-    .catch((err) => {
-      console.error("❌ mongodb: connection failed", err);
-      throw err;
-    });
+  client = new MongoClient(uri, options)
+  clientPromise = client.connect()
 }
 
-export default clientPromise;
+export default clientPromise
+
+export async function getDb() {
+  const client = await clientPromise
+  return client.db("codeelysium")
+}

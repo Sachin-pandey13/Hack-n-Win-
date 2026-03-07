@@ -1,114 +1,61 @@
 // lib/offlineStorage.ts
-// A small wrapper that prefers idb-keyval (IndexedDB) when available,
-// but falls back to localStorage (browser only) if idb-keyval isn't installed
-// or unavailable. This avoids build-time module-not-found errors.
 
-type AnyObj = Record<string, any>;
+const DB_NAME = "codeelysium-offline"
+const STORE = "lessons"
 
-/** Helper to try dynamic import of idb-keyval */
-async function tryIdb() {
-  try {
-    const mod = await import("idb-keyval");
-    // mod exports get, set, del, clear, etc.
-    return mod as {
-      get: (k: string) => Promise<any>;
-      set: (k: string, v: any) => Promise<void>;
-      del: (k: string) => Promise<void>;
-    };
-  } catch (e) {
-    return null;
-  }
-}
+function openDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1)
 
-/** Browser localStorage helpers (synchronous) */
-function lsGet(key: string): any | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-function lsSet(key: string, value: any) {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {}
-}
-function lsDel(key: string) {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.removeItem(key);
-  } catch {}
-}
-
-/** Public API */
-
-/** Index (list of lessons) */
-export async function getIndex(): Promise<AnyObj | null> {
-  const idb = await tryIdb();
-  if (idb?.get) {
-    try {
-      return (await idb.get("offline-index")) ?? null;
-    } catch {
-      return lsGet("offline-index");
+    req.onupgradeneeded = () => {
+      const db = req.result
+      if (!db.objectStoreNames.contains(STORE)) {
+        db.createObjectStore(STORE)
+      }
     }
-  }
-  return lsGet("offline-index");
+
+    req.onsuccess = () => resolve(req.result)
+    req.onerror = () => reject(req.error)
+  })
 }
 
-export async function setIndex(indexObj: AnyObj): Promise<void> {
-  const idb = await tryIdb();
-  if (idb?.set) {
-    try {
-      await idb.set("offline-index", indexObj);
-      return;
-    } catch {
-      /* fallthrough to localStorage */
-    }
-  }
-  lsSet("offline-index", indexObj);
+export async function setLesson(id: string, data: any) {
+  const db = await openDB()
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, "readwrite")
+    const store = tx.objectStore(STORE)
+
+    const req = store.put(data, id)
+
+    req.onsuccess = () => resolve(true)
+    req.onerror = () => reject(req.error)
+  })
 }
 
-/** Lessons */
-export async function getLesson(id: string): Promise<AnyObj | null> {
-  const key = `lesson:${id}`;
-  const idb = await tryIdb();
-  if (idb?.get) {
-    try {
-      return (await idb.get(key)) ?? null;
-    } catch {
-      return lsGet(key);
-    }
-  }
-  return lsGet(key);
+export async function getLesson(id: string) {
+  const db = await openDB()
+
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, "readonly")
+    const store = tx.objectStore(STORE)
+
+    const req = store.get(id)
+
+    req.onsuccess = () => resolve(req.result)
+    req.onerror = () => reject(req.error)
+  })
 }
 
-export async function setLesson(id: string, lessonObj: AnyObj): Promise<void> {
-  const key = `lesson:${id}`;
-  const idb = await tryIdb();
-  if (idb?.set) {
-    try {
-      await idb.set(key, lessonObj);
-      return;
-    } catch {
-      /* fallthrough */
-    }
-  }
-  lsSet(key, lessonObj);
-}
+export async function getAllLessons() {
+  const db = await openDB()
 
-export async function removeLesson(id: string): Promise<void> {
-  const key = `lesson:${id}`;
-  const idb = await tryIdb();
-  if (idb?.del) {
-    try {
-      await idb.del(key);
-      return;
-    } catch {
-      /* fallthrough */
-    }
-  }
-  lsDel(key);
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, "readonly")
+    const store = tx.objectStore(STORE)
+
+    const req = store.getAll()
+
+    req.onsuccess = () => resolve(req.result)
+    req.onerror = () => reject(req.error)
+  })
 }

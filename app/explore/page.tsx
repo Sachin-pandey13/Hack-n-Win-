@@ -5,7 +5,8 @@ import { useMemo, useState, useEffect, useRef } from "react";
 import { PLAYLISTS, TOPICS, PROVIDERS, type Playlist } from "@/lib/playlists";
 import { Search, ExternalLink, PieChart as PieIcon, X } from "lucide-react";
 import TopicFilter from "@/components/nav/TopicFilter";
-
+import { auth, db } from "@/lib/firebase"
+import { doc, getDoc } from "firebase/firestore"
 import Modal from "@/components/ui/Modal";
 import CategoryTiles from "@/components/explore/CategoryTiles";
 import StreamSelector from "@/components/explore/StreamSelector";
@@ -86,6 +87,40 @@ export default function ExplorePage() {
   const [techTopic, setTechTopic] = useState<string | null>(null); // e.g. "DSA", "Languages", "Interview"
   const [selectedClass, setSelectedClass] = useState<string | null>(null); // class selector for STEAM
   const [isSmall, setIsSmall] = useState<boolean>(false);
+
+  useEffect(() => {
+  async function loadPreference() {
+    const user = auth.currentUser
+    if (!user) return
+
+    const ref = doc(db, "user_preferences", user.uid)
+    const snap = await getDoc(ref)
+
+    if (!snap.exists()) return
+
+    const pref = snap.data()
+
+    // Auto configure explore page
+    setSelectedStream(pref.stream || null)
+
+    // map career → subject or topic
+    if (pref.career === "Engineering") {
+      setSelectedCategory("Technical")
+      setTechTopic("DSA")
+    }
+
+    if (pref.career === "Medical") {
+      setSelectedCategory("Curriculum")
+      setSelectedSubject("Biology")
+    }
+
+    if (pref.career === "Architecture") {
+      setSelectedCategory("Project")
+    }
+  }
+
+  loadPreference()
+}, [])
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)");

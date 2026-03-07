@@ -12,23 +12,26 @@ export type Playlist = {
   id: string;
   title: string;
   provider: string;
-  /** Multiple tags (Arrays, Strings, DP, …) */
+
   topics: string[];
   language: Language;
   level: Level;
   description: string;
-  /** YouTube content reference */
+
   youtube:
     | { kind: "playlist"; playlistId: string }
     | { kind: "video"; videoId: string };
-  /** Optional card art */
+
   thumbnail?: string;
 
-  // NEW optional fields used by Explore page
-  category?: Category;
-  stream?: string | null; // e.g. "CSE", "ECE", "EE", ...
-  subject?: string | null; // e.g. "Database Management Systems"
-  prominence?: number; // 0..100 - optional ranking for "most prominent" items
+  /** Explore metadata */
+  category?: Category;      // Curriculum / Technical / Project / Trending
+  stream?: string | null;   // PCM / PCB / CSE / ECE etc
+  career?: string | null;   // Engineering / Medical / Commerce
+  subject?: string | null;
+  grade?: string | null;    // class filter (6–12)
+
+  prominence?: number;
 };
 
 /* ────────────────────────────────────────────────────────────────
@@ -619,4 +622,28 @@ export const PLAYLISTS: Playlist[] = [
     subject: null,
     prominence: 10,
   },
+// -------------------- School: PCM --------------------
+
+{
+ id: "class11-physics-mechanics",
+ title: "Class 11 Physics — Mechanics",
+ provider: "Physics Wallah",
+ topics: ["Physics", "Mechanics"],
+ language: "Hindi",
+ level: "Beginner",
+ description: "Complete mechanics for class 11 students.",
+
+ youtube: {
+   kind: "playlist",
+   playlistId: "PLACEHOLDER_PCM_PHYSICS"
+ },
+
+ category: "Curriculum",
+ stream: "PCM",
+ career: "Engineering",
+ subject: "Physics",
+ grade: "11",
+
+ prominence: 90
+},
 ];
