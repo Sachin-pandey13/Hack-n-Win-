@@ -614,7 +614,12 @@ const Chip = ({ children, on = false, className = "", ...rest }: any) => (
 const Card = ({ children, className = "", ...rest }: any) => (
   <section
     {...rest}
-    className={`rounded-2xl border border-white/10 bg-[rgba(12,16,34,.86)] backdrop-blur-xl ${className}`}
+    className={`rounded-2xl border border-white/10 bg-[rgba(12,16,34,.86)] backdrop-blur-xl
+    transition-all duration-300 ease-out
+    hover:-translate-y-2
+    hover:backdrop-blur-2xl
+    hover:shadow-[0_25px_60px_rgba(0,0,0,0.45)]
+    ${className}`}
   >
     {children}
   </section>
@@ -624,7 +629,11 @@ const CardHeader = ({ children, className = "" }: any) => (
 );
 const CardBody = ({ children, className = "" }: any) => <div className={`p-4 ${className}`}>{children}</div>;
 const Stat = ({ label, value }: { label: string; value: string | number }) => (
-  <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+  <div className="rounded-xl border border-white/10 bg-white/5 p-3
+transition-all duration-300
+hover:-translate-y-1
+hover:bg-white/10
+hover:shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
     <div className="text-xs text-slate-400">{label}</div>
     <div className="text-lg font-semibold mt-1">{value}</div>
   </div>
@@ -709,13 +718,21 @@ function Lobby({
                     </li>
                   ))}
                 {leaderboard.map((u, i) => (
-                  <li key={u.name} className="flex items-center justify-between rounded-lg px-3 py-2 bg-white/5">
-                    <span className="truncate">
-                      {i + 1}. {u.name}
-                    </span>
-                    <span className="text-slate-300">{u.rating}</span>
-                  </li>
-                ))}
+  <li
+    key={u.name}
+    className="flex items-center justify-between rounded-lg px-3 py-2 bg-white/5
+    transition-all duration-300 ease-out
+    hover:-translate-y-1
+    hover:bg-white/10
+    hover:backdrop-blur-lg
+    hover:shadow-[0_10px_30px_rgba(0,0,0,0.35)]"
+  >
+    <span className="truncate">
+      {i + 1}. {u.name}
+    </span>
+    <span className="text-slate-300">{u.rating}</span>
+  </li>
+))}
               </ul>
             </CardBody>
           </Card>
@@ -1277,10 +1294,17 @@ function DesignTokens() {
       .btn:hover{ background: rgba(15,23,42,.65); box-shadow: 0 8px 20px rgba(99,102,241,.18); transform: translateY(-1px); }
       .btn:active{ transform: translateY(0); }
       .btn-primary{
-        background: linear-gradient(90deg, var(--primary), var(--primary-2));
-        color: white; border-color: rgba(129,140,248,.45);
-        box-shadow: 0 10px 24px rgba(99,102,241,.32);
-      }
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
+  color: white;
+  border-color: rgba(129,140,248,.45);
+  box-shadow: 0 10px 24px rgba(99,102,241,.32);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.btn-primary:hover{
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 45px rgba(99,102,241,.45);
+}
       .btn-primary:hover{ filter: brightness(1.05); }
 
       .chip{

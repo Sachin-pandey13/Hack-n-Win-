@@ -6,6 +6,11 @@ export default function GamesPage() {
     { id: "circuit", name: "Circuit Builder" },
     { id: "periodic", name: "Periodic Table Quiz" },
     { id: "wordmatch", name: "Word Match (Science Terms)" },
+    { id: "guess", name: "Binary Logic Games"},
+    { id: "grid",  name: "Grid Game(Sudoku-Style)"},
+    { id: "geography",  name: "KBC Game(Geography-Based)"},
+    { id: "budget",  name: "Budget Challenge Game"},
+    { id: "riddle",  name: "Riddle Game"},
   ];
 
   return (
