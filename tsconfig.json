@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,57 +14,31 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-<<<<<<< HEAD
-    "plugins": [{ "name": "next" }],
 
-=======
+    "types": ["@react-three/fiber", "three"],
+
     "plugins": [
       {
         "name": "next"
       }
     ],
->>>>>>> 4193aa70f18d9f45ebaefdc935135f5022d7b5d5
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@/app/*": [
-        "./app/*"
-      ],
-      "@/components/*": [
-        "./components/*"
-      ],
-      "@/lib/*": [
-        "./lib/*"
-      ],
-      "@/store/*": [
-        "./store/*"
-      ],
-      "@/types/*": [
-        "./types/*"
-      ]
+      "@/*": ["./*"],
+      "@/app/*": ["./app/*"],
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/store/*": ["./store/*"],
+      "@/types/*": ["./types/*"]
     }
   },
-
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-<<<<<<< HEAD
-    ".next/types/**/*.ts",
-    "global.d.ts"
-  ],
-
-  "exclude": ["node_modules"]
-}
-=======
     "global.d.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
->>>>>>> 4193aa70f18d9f45ebaefdc935135f5022d7b5d5

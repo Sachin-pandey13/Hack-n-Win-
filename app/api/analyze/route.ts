@@ -97,7 +97,7 @@ Rules:
 - If you cannot determine something, set that field to null or an empty array.
 - For complexity, if you cannot measure, still return best estimate as a Big-O string or null.
 - For errors: include file line numbers relative to the provided code (1-indexed) when possible.
-- For `series`: include numeric ops for multiple n values if you can (optional).
+- For series: include numeric ops for multiple n values if you can (optional).
 - Keep messages concise (one-two sentences each).
 `.trim();
 

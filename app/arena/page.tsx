@@ -10,7 +10,6 @@ import { PROBLEMS } from "@/lib/problem";
 import type { Problem, Example } from "@/types/problem";
 import { runCodeOnServerMock } from "@/lib/judge";
 
-
 // --- responsive helpers ---
 function useIsMobile(breakpoint = 1024) {
   const [isMobile, setIsMobile] = React.useState(false);
@@ -24,8 +23,7 @@ function useIsMobile(breakpoint = 1024) {
 }
 
 
-
-
+import MultiverseWrapper from "@/components/arena/MultiverseWrapper";
 
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -337,8 +335,7 @@ export default function ArenaPage() {
   async function handleSubmitSolution() {
   const p = problems[currentIdx];
   try {
-    const res = await runCodeOnServerMock(p, code, language);
-
+    await runCodeOnServerMock(p, code, language);
     // replace mock with real call
     const response = await fetch("/api/submit", {
       method: "POST",
@@ -381,7 +378,7 @@ export default function ArenaPage() {
   return (
     <div className="relative min-h-screen bg-arena text-slate-200">
       {/* New: Multiverse 3D canvas (Three.js) */}
-      <Multiverse3D phase={phase} />
+      <MultiverseWrapper phase={phase} />
 
       {/* Fallback decorative layers (kept subtle) */}
       <div className="arena-grid pointer-events-none" />
@@ -443,153 +440,10 @@ export default function ArenaPage() {
    - starfield + floating rings + reactive parallax
    - speed/intensity react to current phase (lobby vs matchmaking vs battle)
 ──────────────────────────────────────────────────────────────────────────── */
-const Multiverse3D = ({ phase }: { phase: Phase }) => {
-  const isMobile = useIsMobile(); // < 1024px → lighter scene
 
-  const Canvas = dynamic(
-    () => import("@react-three/fiber").then((m) => m.Canvas),
-    { ssr: false }
-  ) as any;
-
-  return (
-    <div className="pointer-events-none fixed inset-0 -z-10">
-      <Canvas
-        gl={{ antialias: !isMobile, alpha: true }}
-        dpr={isMobile ? [1, 1.25] : [1, 2]}
-        camera={{ fov: isMobile ? 60 : 55, position: [0, 0, 9] }}
-        frameloop={isMobile ? "demand" : "always"} // save battery on phones
-      >
-        <color attach="background" args={["#070b1a"]} />
-        {!isMobile && <fog attach="fog" args={["#070b1a", 12, 28]} />}
-        <ambientLight intensity={0.7} />
-        <directionalLight position={[4, 6, 4]} intensity={1.1} />
-        <directionalLight position={[-6, -2, -4]} intensity={0.4} />
-
-        {/* Camera parallax stays, but tamed on mobile */}
-        <ParallaxRig phase={phase} />
-
-        {/* Fewer particles & meshes on mobile for perf */}
-        <Starfield phase={phase} />
-        {!isMobile && <NebulaSheets phase={phase} />}
-        {!isMobile && <FloatingRings phase={phase} />}
-      </Canvas>
-    </div>
-  );
-};
 
 // subtle camera parallax driven by mouse (without capturing pointer events)
-function ParallaxRig({ phase }: { phase: Phase }) {
-  // track mouse via window listener
-  const target = useRef({ x: 0, y: 0 });
-  useEffect(() => {
-    const h = (e: MouseEvent) => {
-      const mx = (e.clientX / window.innerWidth) * 2 - 1;
-      const my = (e.clientY / window.innerHeight) * 2 - 1;
-      target.current.x = mx;
-      target.current.y = my;
-    };
-    window.addEventListener("mousemove", h, { passive: true });
-    return () => window.removeEventListener("mousemove", h);
-  }, []);
 
-  const { useFrame } = require("@react-three/fiber");
-  const group = useRef<any>(null);
-  useFrame((_, dt) => {
-    const k = phase === "matchmaking" ? 0.7 : phase === "playing" ? 0.5 : 0.35;
-    if (group.current) {
-      group.current.rotation.y += (target.current.x * 0.15 - group.current.rotation.y) * (4 * dt);
-      group.current.rotation.x += (-target.current.y * 0.12 - group.current.rotation.x) * (4 * dt);
-      group.current.position.z += ((phase === "matchmaking" ? -0.6 : -0.3) - group.current.position.z) * (2 * dt);
-      group.current.scale.setScalar(1 + k * 0.05);
-    }
-  });
-  return <group ref={group} />;
-}
-
-function Starfield({ phase }: { phase: Phase }) {
-  const { Stars } = require("@react-three/drei");
-  const speed = phase === "matchmaking" ? 0.6 : phase === "playing" ? 0.35 : 0.2;
-  return (
-    <Stars radius={90} depth={40} count={7000} factor={3} saturation={0} fade speed={speed} />
-  );
-}
-
-function NebulaSheets({ phase }: { phase: Phase }) {
-  const { Float } = require("@react-three/drei");
-  const speed = phase === "matchmaking" ? 1.4 : 0.9;
-  const opacity = phase === "playing" ? 0.22 : 0.28;
-
-  return (
-    <>
-      <Float speed={speed} rotationIntensity={0.3} floatIntensity={0.6}>
-        <mesh position={[0, 0, -4]} rotation={[0, 0, 0]}>
-          <planeGeometry args={[40, 26, 32, 32]} />
-          <meshStandardMaterial
-            transparent
-            opacity={opacity}
-            color={"#4f46e5"}
-            roughness={0.9}
-            metalness={0.1}
-            emissive={"#4338ca"}
-            emissiveIntensity={0.45}
-          />
-        </mesh>
-      </Float>
-      <Float speed={speed * 1.1} rotationIntensity={0.25} floatIntensity={0.5}>
-        <mesh position={[0, 0, -8]} rotation={[0, Math.PI / 8, 0]}>
-          <planeGeometry args={[60, 36, 16, 16]} />
-          <meshStandardMaterial
-            transparent
-            opacity={opacity * 0.7}
-            color={"#22d3ee"}
-            roughness={1}
-            metalness={0.05}
-            emissive={"#0ea5e9"}
-            emissiveIntensity={0.25}
-          />
-        </mesh>
-      </Float>
-    </>
-  );
-}
-
-function FloatingRings({ phase }: { phase: Phase }) {
-  const { Float } = require("@react-three/drei");
-  const speed = phase === "matchmaking" ? 1.8 : phase === "playing" ? 1.2 : 0.8;
-
-  return (
-    <>
-      <Float speed={speed} rotationIntensity={0.6} floatIntensity={0.9}>
-        <mesh position={[-2.6, 1.1, -1.2]} rotation={[0.4, 0.2, 0]}>
-          <torusKnotGeometry args={[0.9, 0.24, 220, 16]} />
-          <meshPhysicalMaterial
-            transparent
-            color={"#a78bfa"}
-            opacity={0.45}
-            roughness={0.1}
-            metalness={0.9}
-            clearcoat={1}
-            clearcoatRoughness={0.2}
-          />
-        </mesh>
-      </Float>
-      <Float speed={speed * 0.9} rotationIntensity={0.4} floatIntensity={0.7}>
-        <mesh position={[2.4, -1.2, -0.6]} rotation={[-0.3, 0.4, 0.1]}>
-          <torusKnotGeometry args={[0.7, 0.18, 180, 12]} />
-          <meshPhysicalMaterial
-            transparent
-            color={"#34d399"}
-            opacity={0.35}
-            roughness={0.15}
-            metalness={0.95}
-            iridescence={0.4}
-            iridescenceIOR={1.1}
-          />
-        </mesh>
-      </Float>
-    </>
-  );
-}
 
 /* ────────────────────────────────────────────────────────────────────────────
    DESIGN SYSTEM PRIMITIVES
@@ -984,8 +838,8 @@ function BattleRoom({
               <div className="px-4 py-3 border-b border-white/10 text-sm font-semibold">{t.problems}</div>
               <div className="flex-1 overflow-y-auto p-3 space-y-2" role="listbox" aria-label="Problems list">
                 {problems.map((p: Problem, i: number) => (
-                  <button
-                    key={p.id}
+                 <button
+                  key={`${p.id}-${i}`}
                     onClick={() => setCurrentIdx(i)}
                     role="option"
                     aria-selected={i === currentIdx}
@@ -1114,7 +968,7 @@ function BattleRoom({
             <div className="max-h-40 overflow-y-auto p-3 space-y-2">
               {problems.map((p: Problem, i: number) => (
                 <button
-                  key={p.id}
+                 key={`${p.id}-${i}`}
                   onClick={() => setCurrentIdx(i)}
                   className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
                     i === currentIdx ? "bg-indigo-600/40 border border-indigo-400/40" : "bg-white/5"
