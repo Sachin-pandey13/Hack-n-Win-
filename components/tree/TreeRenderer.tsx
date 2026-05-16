@@ -126,8 +126,30 @@ export default function TreeRenderer({
    else if (stage >= 4) container.scrollTo({ top: container.scrollHeight - 850, behavior: 'smooth' });
  }, [stage]);
 
+ // ── DYNAMIC VIEWBOX ──────────────────────────────────────────────────────────
+ // Gather all currently-rendered node X positions so we can shift the viewBox
+ // to keep everything centred, even when branches grow heavily to one side.
+ const PADDING = 200; // extra breathing room on each side
+ const VIEW_H  = 1400;
+
+ const allXCoords: number[] = [
+   ...classNodes.map(c => c.x),
+   ...(stage >= 2 ? streamNodes.map(s => s.x) : []),
+   ...(stage >= 3 ? careerNodes.map(c => c.x) : []),
+   ...(stage >= 4 ? subFieldNodes.map(s => s.x) : []),
+   trunkStart.x, trunkEnd.x,
+ ];
+
+ const minX = Math.min(...allXCoords) - PADDING;
+ const maxX = Math.max(...allXCoords) + PADDING;
+ const viewW = Math.max(maxX - minX, 900); // never narrower than 900 units
+ // Re-centre: if content is narrower than viewW, shift so it's centred
+ const contentCx = (minX + maxX) / 2;
+ const vbX = contentCx - viewW / 2;
+ const dynamicViewBox = `${vbX} 0 ${viewW} ${VIEW_H}`;
+
  return (
-  <svg viewBox="-300 0 1600 1400" className="w-full h-[1400px] pointer-events-none">
+  <svg viewBox={dynamicViewBox} className="w-full h-[1400px] pointer-events-none" style={{ transition: 'viewBox 0.6s ease' }}>
    <defs>
     <linearGradient id="bark" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stopColor="#1e120d" />
@@ -339,7 +361,7 @@ function CherryBlossomNode({
    className="pointer-events-auto cursor-pointer"
    onClick={(e) => { e.stopPropagation(); if (onClick) onClick(); }}
    onDoubleClick={(e) => { e.stopPropagation(); if (onDoubleClick) onDoubleClick(); }}
-   onMouseEnter={(e) => {
+   onMouseMove={(e) => {
      if(onHoverCallback && onHoverInfo) {
        onHoverCallback({
          career: onHoverInfo,

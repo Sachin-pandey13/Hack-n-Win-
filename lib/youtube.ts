@@ -54,18 +54,16 @@ export function buildEmbedSrc(
   src: YTSource,
   origin?: string
 ): string {
-  const o = origin ?? (typeof window !== "undefined" ? window.location.origin : "http://localhost");
   if (src.kind === "playlist") {
     const list = getPlaylistId(src.playlistId);
-    // use nocookie domain + basic hygiene params
-    return `https://www.youtube-nocookie.com/embed/videoseries?list=${encodeURIComponent(
+    return `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(
       list
-    )}&rel=0&modestbranding=1&origin=${encodeURIComponent(o)}`;
+    )}&rel=0`;
   } else {
     const id = getVideoId(src.videoId);
-    return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(
+    return `https://www.youtube.com/embed/${encodeURIComponent(
       id
-    )}?rel=0&modestbranding=1&origin=${encodeURIComponent(o)}`;
+    )}?rel=0`;
   }
 }
 

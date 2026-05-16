@@ -1,10 +1,13 @@
 // app/api/problems/[id]/route.ts
 import { NextResponse } from "next/server";
-import { PROBLEMS } from "@/lib/problem"; // adjust path if necessary
+import { PROBLEMS } from "@/lib/problem";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const id = params?.id;
+    const { id } = await params;
     if (!id) return NextResponse.json({ error: "missing id" }, { status: 400 });
 
     // Try to find problem by id
@@ -14,6 +17,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
     return NextResponse.json(found, { status: 200 });
   } catch (err: any) {
-    return NextResponse.json({ error: err?.message ?? "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: err?.message ?? "Server error" },
+      { status: 500 }
+    );
   }
 }

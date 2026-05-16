@@ -7,6 +7,7 @@ import React, {
   useState,
   useCallback,
   useId,
+  use,
 } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
 import { useRouter } from "next/navigation";
@@ -291,17 +292,26 @@ type MaxKey = "desc" | "editor" | "result" | null;
 export default function SolveProblemPage({
   params,
 }: {
-  params: { category: string; id: string };
+  params: Promise<{ category: string; id: string }>;
 }) {
   const router = useRouter();
+  const unwrappedParams = use(params);
   const problem = useMemo<Problem | undefined>(
-    () => PROBLEMS.find((p) => p.id === params.id),
-    [params.id]
+    () => PROBLEMS.find((p) => p.id === unwrappedParams.id),
+    [unwrappedParams.id]
   );
   if (!problem) {
     return (
-      <div className="h-screen w-full grid place-items-center text-slate-300">
-        Problem not found.
+      <div className="h-screen w-full flex flex-col items-center justify-center gap-4 bg-[#0d1117] text-slate-300">
+        <div className="text-5xl">🔍</div>
+        <h2 className="text-xl font-semibold">Problem not found</h2>
+        <p className="text-slate-500 text-sm">The problem &quot;{unwrappedParams.id}&quot; doesn&apos;t exist or was moved.</p>
+        <button
+          onClick={() => router.push('/problems')}
+          className="mt-2 px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition"
+        >
+          ← Back to Problems
+        </button>
       </div>
     );
   }
@@ -523,23 +533,7 @@ setRunResult({
 }
 
 
-// ---------- harness helpers (module-level) ----------
-function hasMainEntry(source: string | null | undefined, lang: Lang): boolean {
-  if (!source) return false;
-  try {
-    if (lang === "cpp" || lang === "c") {
-      if (/\bint\s+main\s*\(|\bmain\s*\(/.test(source)) return true;
-    } else if (lang === "java") {
-      if (/public\s+static\s+void\s+main\s*\(/i.test(source)) return true;
-    } else if (lang === "python") {
-      if (/if\s+__name__\s*==\s*['"]__main__['"]/i.test(source)) return true;
-    }
-  } catch {
-    return false;
-  }
-  return false;
-}
-
+// ---------- harness helpers ----------
 function hasMainEntry(source: string | null | undefined, lang: Lang): boolean {
   if (!source) return false;
   const s = String(source);
@@ -884,54 +878,98 @@ async function handleSubmit() {
           className="h-full"
           storageKey={`ws-h-${problem.id}-${gidH}`}
         >
-          {/* Description */}
+          {/* ── Description Panel ── */}
           {maximized !== "editor" && maximized !== "result" && (
             <>
               <Panel minSize={18} defaultSize={36} className="overflow-hidden">
-                <div className="panel-card rounded-2xl h-full">
-                  <div className="sticky top-0 z-10 chrome px-4 py-2 flex items-center gap-4">
-                    <button onClick={() => router.back()} className="btn-ghost">
-                      ← Back
-                    </button>
-                    <nav className="flex items-center gap-4 text-sm">
+                <div className="panel-card rounded-2xl h-full flex flex-col">
+                  {/* Chrome */}
+                  <div className="chrome px-4 py-2 flex items-center gap-3 flex-shrink-0">
+                    <button onClick={() => router.back()} className="btn-ghost text-xs">← Back</button>
+                    <nav className="flex items-center gap-3 text-sm">
                       <span className="tab-active">Description</span>
                       <span className="tab">Editorial</span>
                       <span className="tab">Solutions</span>
-                      <span className="tab">Submissions</span>
                     </nav>
                     <div className="ml-auto flex items-center gap-2">
                       <span className={`badge ${difficultyClass}`}>{problem.difficulty}</span>
-                      <button className="tool" title="Maximize" onClick={() => setMaximized("desc")}>
-                        ⤢
-                      </button>
+                      <button className="tool" title={maximized === "desc" ? "Restore" : "Maximize"}
+                        onClick={() => setMaximized(m => m === "desc" ? null : "desc")}>⤢</button>
                     </div>
                   </div>
 
-                  <div className="px-6 py-5">
-                    <h1 className="text-xl font-semibold text-white">
-                      {problem.number}. {problem.title}
-                    </h1>
-                    <div className="mt-1 text-xs text-slate-400">{problem.tags.join(" • ")}</div>
+                  {/* Scrollable content */}
+                  <div className="flex-1 overflow-y-auto px-5 py-4">
+                    {/* Problem header */}
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="flex-1">
+                        <h1 className="text-lg font-bold text-white leading-tight">
+                          {problem.number}. {problem.title}
+                        </h1>
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {problem.tags.map((t, i) => (
+                            <span key={i} className="text-[10px] text-indigo-400 bg-indigo-500/10 ring-1 ring-indigo-500/20 px-2 py-0.5 rounded-full">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
 
-                    <article className="prose prose-invert max-w-none mt-5">
-                      <p className="leading-7">{problem.statement.content}</p>
+                    {/* Platform badge */}
+                    {(problem as any).platform && (
+                      <div className="mb-4 flex items-center gap-2">
+                        <span className="text-[10px] text-slate-500 uppercase tracking-wider">Platform:</span>
+                        <span className="text-xs font-semibold text-slate-300 bg-white/5 px-2 py-0.5 rounded">{(problem as any).platform}</span>
+                      </div>
+                    )}
 
-                      <h4>Examples</h4>
-                      <ul>
-                        {problem.statement.examples.map((ex: Example, i: number) => (
-                          <li key={i}>
-                            <b>Input:</b> {ex.input} &nbsp; <b>Output:</b> {ex.output}
+                    {/* Problem statement */}
+                    <div className="text-sm text-slate-300 leading-relaxed mb-6">
+                      {problem.statement.content}
+                    </div>
+
+                    {/* Examples */}
+                    <div className="mb-6 space-y-3">
+                      <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Examples</h4>
+                      {problem.statement.examples.map((ex: Example, i: number) => (
+                        <div key={i} className="rounded-xl bg-[#0d1117] border border-white/[0.06] p-4 font-mono text-xs">
+                          <div className="mb-2">
+                            <span className="text-slate-500">Input: </span>
+                            <span className="text-emerald-300">{ex.input}</span>
+                          </div>
+                          <div>
+                            <span className="text-slate-500">Output: </span>
+                            <span className="text-amber-300">{ex.output}</span>
+                          </div>
+                          {ex.explanation && (
+                            <div className="mt-2 text-slate-500">Explanation: {ex.explanation}</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Constraints */}
+                    <div className="mb-6">
+                      <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Constraints</h4>
+                      <ul className="space-y-1.5">
+                        {problem.statement.constraints.map((c: string, i: number) => (
+                          <li key={i} className="flex items-start gap-2 text-xs text-slate-400 font-mono">
+                            <span className="text-indigo-500 mt-0.5">▸</span> {c}
                           </li>
                         ))}
                       </ul>
+                    </div>
 
-                      <h4>Constraints</h4>
-                      <ul>
-                        {problem.statement.constraints.map((c: string, i: number) => (
-                          <li key={i}>{c}</li>
-                        ))}
-                      </ul>
-                    </article>
+                    {/* Optimal Solution hint */}
+                    {(problem as any).optimalSolution && (
+                      <div className="rounded-xl bg-indigo-900/20 border border-indigo-500/20 p-4">
+                        <h4 className="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">💡 Optimal Approach</h4>
+                        <div className="flex gap-4 text-xs mb-2">
+                          <span className="text-slate-500">Time: <span className="text-amber-400 font-mono">{(problem as any).optimalSolution.timeComplexity}</span></span>
+                          <span className="text-slate-500">Space: <span className="text-emerald-400 font-mono">{(problem as any).optimalSolution.spaceComplexity}</span></span>
+                        </div>
+                        <p className="text-xs text-slate-400">{(problem as any).optimalSolution.explanation}</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Panel>
@@ -1030,7 +1068,7 @@ async function handleSubmit() {
                       {/* Editor fills ALL remaining height */}
                      <div className="flex-1 min-h-0">
   <Editor
-    path={`${params.id}.${language}`}     // ← stable model path per problem+language
+    path={`${unwrappedParams.id}.${language}`}     // ← stable model path per problem+language
     keepCurrentModel                       // ← prevents model churn on re-renders
     height="100%"
     theme="vs-dark"

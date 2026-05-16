@@ -1,288 +1,107 @@
-// app/explore/page.tsx
 "use client";
 
 import { useMemo, useState, useEffect, useRef } from "react";
 import { PLAYLISTS, TOPICS, PROVIDERS, type Playlist } from "@/lib/playlists";
-import { Search, ExternalLink, PieChart as PieIcon, X } from "lucide-react";
-import TopicFilter from "@/components/nav/TopicFilter";
-import { auth, db } from "@/lib/firebase"
-import { doc, getDoc } from "firebase/firestore"
+import { Search, ExternalLink, UploadCloud, Rocket } from "lucide-react";
+import { auth, db } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import Modal from "@/components/ui/Modal";
 import CategoryTiles from "@/components/explore/CategoryTiles";
 import StreamSelector from "@/components/explore/StreamSelector";
 import SubjectList from "@/components/explore/SubjectList";
 import TopicGrid from "@/components/explore/TopicGrid";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
-
-const COLORS = [
-  "#6366f1",
-  "#f59e0b",
-  "#10b981",
-  "#ef4444",
-  "#3b82f6",
-  "#ec4899",
-  "#22d3ee",
-  "#eab308",
-  "#22c55e",
-];
-
-const darken = (hex: string, amt = 0.22) => {
-  const n = hex.replace("#", "");
-  const num = parseInt(n, 16);
-  const r = Math.max(0, ((num >> 16) & 0xff) * (1 - amt));
-  const g = Math.max(0, ((num >> 8) & 0xff) * (1 - amt));
-  const b = Math.max(0, (num & 0xff) * (1 - amt));
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-};
-
-function PieLabel(props: any & { small?: boolean }) {
-  const { cx, cy, midAngle, innerRadius, outerRadius, value, name, small } =
-    props;
-  const RAD = Math.PI / 180;
-  const r = innerRadius + (outerRadius - innerRadius) * 0.72;
-  const x = cx + r * Math.cos(-midAngle * RAD);
-  const y = cy + r * Math.sin(-midAngle * RAD);
-  const text = `${name}: ${value}m`;
-  return (
-    <text
-      x={x}
-      y={y}
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-      style={{ fontSize: small ? 10 : 12, fontWeight: 600 }}
-      fill="#e5e7eb"
-      stroke="#0b0f22"
-      strokeOpacity={0.6}
-      strokeWidth={2}
-    >
-      {text}
-    </text>
-  );
-}
-
-/* -------------------- Main Page -------------------- */
+import UploadModal from "@/components/explore/UploadModal";
+import PlaylistCard from "@/components/cards/PlaylistCard";
+import { getTutorUploads, type TutorUpload } from "@/lib/userUploads";
+import { motion } from "framer-motion";
 
 export default function ExplorePage() {
   // base filters
   const [q, setQ] = useState("");
-  const [topic, setTopic] = useState<"All" | string>("All");
   const [provider, setProvider] = useState<"All" | string>("All");
-  const [language, setLanguage] = useState<
-    "All" | "English" | "Hindi" | "Mixed"
-  >("All");
-  const [open, setOpen] = useState<Playlist | null>(null);
+  const [language, setLanguage] = useState<"All" | "English" | "Hindi" | "Mixed">("All");
+  const [open, setOpen] = useState<Playlist | TutorUpload | null>(null);
 
   // new explore state
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedStream, setSelectedStream] = useState<string | null>(null);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [subjectQ, setSubjectQ] = useState<string>("");
-  const [techTopic, setTechTopic] = useState<string | null>(null); // e.g. "DSA", "Languages", "Interview"
-  const [selectedClass, setSelectedClass] = useState<string | null>(null); // class selector for STEAM
-  const [isSmall, setIsSmall] = useState<boolean>(false);
+  const [techTopic, setTechTopic] = useState<string | null>(null);
+  const [selectedClass, setSelectedClass] = useState<string | null>(null);
+
+  // Preference derived overrides
+  const [userCareer, setUserCareer] = useState<string | null>(null);
+  const [userSubField, setUserSubField] = useState<string | null>(null);
+
+  // Tutor Uploads
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [tutorUploads, setTutorUploads] = useState<TutorUpload[]>([]);
+
+  // Refs for scrolling
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const isCseTargeted = userCareer === "Engineering" && userSubField === "CSE" && !selectedCategory;
 
   useEffect(() => {
-  async function loadPreference() {
-    const user = auth.currentUser
-    if (!user) return
-
-    const ref = doc(db, "user_preferences", user.uid)
-    const snap = await getDoc(ref)
-
-    if (!snap.exists()) return
-
-    const pref = snap.data()
-
-    // Auto configure explore page
-    setSelectedStream(pref.stream || null)
-
-    // map career → subject or topic
-    if (pref.career === "Engineering") {
-      setSelectedCategory("Technical")
-      setTechTopic("DSA")
+    if (!isCseTargeted && (selectedSubject || techTopic)) {
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 150);
     }
-
-    if (pref.career === "Medical") {
-      setSelectedCategory("Curriculum")
-      setSelectedSubject("Biology")
-    }
-
-    if (pref.career === "Architecture") {
-      setSelectedCategory("Project")
-    }
-  }
-
-  loadPreference()
-}, [])
+  }, [selectedSubject, techTopic, isCseTargeted]);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)");
-    const update = () => setIsSmall(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    async function loadPreference() {
+      const user = auth.currentUser;
+      if (!user) return;
+      const ref = doc(db, "user_preferences", user.uid);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return;
+
+      const pref = snap.data();
+      setUserCareer(pref.career || null);
+      setUserSubField(pref.subField || null);
+      setSelectedStream(pref.stream || null);
+
+      if (pref.career === "Engineering") {
+        setSelectedCategory("Technical");
+        setTechTopic("DSA");
+      } else if (pref.career === "Medical") {
+        setSelectedCategory("Curriculum");
+        setSelectedSubject("Biology");
+      } else if (pref.career === "Architecture") {
+        setSelectedCategory("Project");
+      }
+    }
+    loadPreference();
+    setTutorUploads(getTutorUploads());
   }, []);
 
-  const [watchData, setWatchData] = useState<Record<string, number>>({});
-  const [chartOpen, setChartOpen] = useState(true);
-  const [activeTitle, setActiveTitle] = useState<string | null>(null);
-  const isPlayingRef = useRef(false);
-  const activeTitleRef = useRef<string | null>(null);
-  const attachedIframes = useRef<Set<HTMLIFrameElement>>(new Set());
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("watchData");
-      if (raw) setWatchData(JSON.parse(raw));
-    } catch {}
-  }, []);
-  useEffect(() => {
-    try {
-      localStorage.setItem("watchData", JSON.stringify(watchData));
-    } catch {}
-  }, [watchData]);
-
-  const getIframeTitle = (iframe: HTMLIFrameElement): string => {
-    const attr =
-      iframe.getAttribute("title") || iframe.getAttribute("aria-label");
-    if (attr && attr.trim()) return attr.trim();
-    let node: HTMLElement | null = iframe;
-    for (let i = 0; i < 8 && node; i++) {
-      const h = node.querySelector<HTMLElement>(
-        "h3, h2, [data-title], .title, [aria-label]"
-      );
-      if (h?.textContent) return h.textContent.trim();
-      node = node.parentElement as HTMLElement | null;
-    }
-    return "Unknown Video";
+  const refreshUploads = () => {
+    setTutorUploads(getTutorUploads());
   };
 
-  const attachPlayers = () => {
-    const iframes = Array.from(
-      document.querySelectorAll<HTMLIFrameElement>(
-        'iframe[src*="youtube.com/embed"]'
-      )
-    );
+  const matchesCategory = (pl: Playlist | TutorUpload) => {
+    const c = pl.category || null;
+    const stream = pl.stream || null;
+    const subject = pl.subject || null;
+    const grade = pl.grade || null;
 
-    const originParam = `origin=${encodeURIComponent(window.location.origin)}`;
-
-    iframes.forEach((iframe) => {
-      if (attachedIframes.current.has(iframe)) return;
-
-      const src0 = iframe.getAttribute("src") || "";
-      let patchedSrc = src0;
-      if (!/enablejsapi=1/i.test(patchedSrc)) {
-        patchedSrc += (patchedSrc.includes("?") ? "&" : "?") + "enablejsapi=1";
-      }
-      if (!/[\?&]origin=/.test(patchedSrc)) {
-        patchedSrc += (patchedSrc.includes("?") ? "&" : "?") + originParam;
-      }
-
-      const bind = () => {
-        // @ts-ignore
-        const YTglobal = (window as any).YT;
-        if (!(YTglobal && YTglobal.Player)) return;
-        // @ts-ignore
-        const player = new YTglobal.Player(iframe, {
-          events: {
-            onStateChange: (event: any) => {
-              const t = getIframeTitle(iframe);
-              // @ts-ignore
-              const S = (window as any).YT.PlayerState;
-              if (event.data === S.PLAYING) {
-                setActiveTitle(t);
-                activeTitleRef.current = t;
-                isPlayingRef.current = true;
-              } else if (
-                event.data === S.PAUSED ||
-                event.data === S.ENDED ||
-                event.data === S.UNSTARTED
-              ) {
-                isPlayingRef.current = false;
-              }
-            },
-          },
-        });
-        attachedIframes.current.add(iframe);
-      };
-
-      const needsPatch = patchedSrc !== src0;
-      if (needsPatch) {
-        iframe.addEventListener("load", bind, { once: true });
-        iframe.setAttribute("src", patchedSrc);
-      } else {
-        bind();
-      }
-    });
-  };
-
-  useEffect(() => {
-    const setup = () => {
-      attachPlayers();
-      const mo = new MutationObserver(() => attachPlayers());
-      mo.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["src"],
-      });
-      return () => mo.disconnect();
-    };
-
-    if ((window as any).YT?.Player) {
-      const teardown = setup();
-      return teardown;
-    }
-
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
-    (window as any).onYouTubeIframeAPIReady = setup;
-  }, [open]);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (isPlayingRef.current && activeTitleRef.current) {
-        const key = activeTitleRef.current;
-        setWatchData((prev) => ({ ...prev, [key]: (prev[key] || 0) + 1 }));
-      }
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  // -------------------- Filtering & Category logic --------------------
-
-  const matchesCategory = (pl: Playlist) => {
-    const c = (pl as any).category || null;
-    const stream = (pl as any).stream || null;
-    const subject = (pl as any).subject || null;
-    const grade = (pl as any).grade || null;
-
-    if (!selectedCategory) return true; // no category chosen -> everything eligible
-
+    if (!selectedCategory) return true;
     if (selectedCategory === "Curriculum") {
-      if (c !== "Curriculum") return false;
-      if (selectedStream && stream !== selectedStream) return false;
-      if (selectedSubject && subject !== selectedSubject) return false;
-      return true;
+      if (selectedStream) {
+        if (stream !== selectedStream) return false;
+        if (selectedSubject && subject !== selectedSubject) return false;
+        return true;
+      }
+      return c === "Curriculum";
     }
-
-    // STEAM: filter by category and optional selectedClass
     if (selectedCategory === "STEAM") {
       if (c !== "STEAM") return false;
       if (selectedClass) {
-        // equality check; if your playlists use ranges like "6-8" consider expanding logic
         if (!grade) return false;
-        // simple match: grade could be "6", "7" or "6-8". Accept exact or ranges that include selected class.
         if (grade === selectedClass) return true;
-        // handle simple ranges like "6-8"
         if (grade.includes("-")) {
           const [a, b] = grade.split("-").map((x: string) => parseInt(x, 10));
           const s = parseInt(selectedClass, 10);
@@ -292,35 +111,26 @@ export default function ExplorePage() {
       }
       return true;
     }
-
-    if (selectedCategory === "Technical") {
-      return c === "Technical";
-    }
-
-    if (selectedCategory === "Project") {
-      return c === "Project";
-    }
-
-    if (selectedCategory === "Trending") {
-      return c === "Trending";
-    }
-
+    if (selectedCategory === "Technical") return c === "Technical";
+    if (selectedCategory === "Project") return c === "Project";
+    if (selectedCategory === "Trending") return c === "Trending";
     return true;
   };
 
+  const allItems = useMemo(() => [...tutorUploads, ...PLAYLISTS], [tutorUploads]);
+
   const filteredBase = useMemo(() => {
-    return PLAYLISTS.filter((p: Playlist) => {
+    return allItems.filter((p) => {
       const matchesQ =
         !q ||
         p.title.toLowerCase().includes(q.toLowerCase()) ||
         p.provider.toLowerCase().includes(q.toLowerCase()) ||
         p.topics.some((t) => t.toLowerCase().includes(q.toLowerCase()));
-      const matchesTopic = topic === "All" || p.topics.includes(topic);
       const matchesProvider = provider === "All" || p.provider === provider;
       const matchesLang = language === "All" || p.language === language;
-      return matchesQ && matchesTopic && matchesProvider && matchesLang;
+      return matchesQ && matchesProvider && matchesLang;
     });
-  }, [q, topic, provider, language]);
+  }, [q, provider, language, allItems]);
 
   const displayed = useMemo(() => {
     let list = filteredBase.filter((pl) => matchesCategory(pl));
@@ -331,15 +141,12 @@ export default function ExplorePage() {
         const topics = pl.topics.map((x) => x.toLowerCase());
         if (t === "languages") {
           return topics.some((tt) =>
-            ["cpp", "c++", "java", "python", "rust", "javascript", "js", "go"].includes(
-              tt
-            )
+            ["cpp", "c++", "java", "python", "rust", "javascript", "js", "go"].includes(tt)
           );
         }
         if (t === "dsa") {
           return topics.some(
-            (tt) =>
-              tt.includes("dsa") || tt.includes("data") || tt.includes("algorithm")
+            (tt) => tt.includes("dsa") || tt.includes("data") || tt.includes("algorithm")
           );
         }
         if (t === "interview") {
@@ -353,440 +160,247 @@ export default function ExplorePage() {
         }
         return topics.includes(t);
       });
-      list = list.sort((a: any, b: any) => (b.prominence || 0) - (a.prominence || 0));
+      list = list.sort((a, b) => (b.prominence || 0) - (a.prominence || 0));
     }
-
     return list;
-  }, [
-    filteredBase,
-    selectedCategory,
-    selectedStream,
-    selectedSubject,
-    techTopic,
-    selectedClass,
-  ]);
+  }, [filteredBase, selectedCategory, selectedStream, selectedSubject, techTopic, selectedClass]);
 
-  const chartData = useMemo(
-    () =>
-      Object.entries(watchData).map(([name, seconds]) => ({
-        name,
-        value: +(seconds / 60).toFixed(2),
-      })),
-    [watchData]
-  );
+  // Derived curated sections for CSE
+  const csePlacementUploads = useMemo(() => tutorUploads.filter(t => t.subject === "CSE" || t.topics.includes("Placement")), [tutorUploads]);
+  const cseDSA = useMemo(() => filteredBase.filter(p => p.category === "Technical" && p.topics.some(t => t.toLowerCase().includes("dsa"))), [filteredBase]);
+  const cseCore = useMemo(() => filteredBase.filter(p => p.category === "Curriculum" && (p.stream === "CSE" || (!p.stream && Object.values(p.topics).some(t => ["dbms","os","compiler design", "computer networks"].includes(t.toLowerCase()))))), [filteredBase]);
+  const cseTrending = useMemo(() => filteredBase.filter(p => !p.isTutorUpload && p.topics.some(t => t.toLowerCase().includes("web") || t.toLowerCase().includes("ai"))), [filteredBase]);
 
-  const getEmbedUrl = (pl: Playlist) =>
+  const getEmbedUrl = (pl: Playlist | TutorUpload) =>
     pl.youtube.kind === "playlist"
       ? `https://www.youtube.com/embed/videoseries?list=${pl.youtube.playlistId}&enablejsapi=1`
       : `https://www.youtube.com/embed/${pl.youtube.videoId}?enablejsapi=1`;
 
-  const getExternalUrl = (pl: Playlist) =>
+  const getExternalUrl = (pl: Playlist | TutorUpload) =>
     pl.youtube.kind === "playlist"
       ? `https://www.youtube.com/playlist?list=${pl.youtube.playlistId}`
       : `https://www.youtube.com/watch?v=${pl.youtube.videoId}`;
 
-  const LabelComp = (p: any) => <PieLabel {...p} small={isSmall} />;
-
-  // Helper for streams list: derive existing streams from PLAYLISTS (Curriculum category)
   const streams = useMemo(() => {
     const s = new Set<string>();
     PLAYLISTS.forEach((pl) => {
-      if ((pl as any).category === "Curriculum" && (pl as any).stream) {
-        s.add((pl as any).stream);
+      if (pl.category === "Curriculum" && pl.stream) {
+        s.add(pl.stream);
       }
     });
-    // fallback default streams if none present
-    return Array.from(s).length ? Array.from(s) : ["CSE", "AI/ML", "CYBER_SECURITY"];
+    const arr = Array.from(s);
+    ["CSE", "IT", "ECE", "EE", "ME", "CE"].forEach(st => {
+      if(!arr.includes(st)) arr.push(st);
+    });
+    return arr;
   }, []);
 
-  // Helper: classes for STEAM selector
   const classes = ["6", "7", "8", "9", "10", "11", "12"];
 
-  // Helper to open playlist uniformly
-  const handleOpen = (p: Playlist) => {
-    setOpen(p);
-    setActiveTitle(p.title);
-    activeTitleRef.current = p.title;
-  };
+  const handleOpen = (p: Playlist | TutorUpload) => setOpen(p);
+
+  const RenderSection = ({ title, items, icon: Icon }: { title: string, items: any[], icon: any }) => {
+    if(!items || items.length === 0) return null;
+    return (
+      <div className="mt-8">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-white mb-4">
+          <Icon className="text-purple-400" size={24} /> {title}
+        </h2>
+        <div className="flex overflow-x-auto pb-6 gap-5 snap-x hide-scrollbar" style={{ scrollbarWidth: "none" }}>
+          {items.map((item) => (
+            <div key={item.id} className="snap-start min-w-[300px] sm:min-w-[380px] w-full shrink-0">
+               <PlaylistCard item={item} onOpen={handleOpen} onUpvoteComplete={refreshUploads} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen overflow-x-hidden">
-      {/* Hero */}
-      <section className="mx-auto w-full max-w-7xl px-3 sm:px-6">
-        <div className="mt-4 sm:mt-6 rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-900/30 via-purple-900/20 to-slate-900/20 p-3 sm:p-4 md:p-6">
-          <h1 className="text-[1.6rem] leading-tight sm:text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-blue-300">
-            Explore Playlists • Learn Faster
-          </h1>
-          <p className="mt-2 max-w-3xl text-xs sm:text-sm md:text-base text-gray-300">
-            Hand-picked playlists arranged by topic. Filter by provider & language. Track your learning with live stats 📊
-          </p>
+    <div className="min-h-screen bg-black/95 overflow-x-hidden text-gray-100 selection:bg-purple-500/30">
+      {/* Dynamic Background */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen opacity-50" />
+         <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen opacity-40" />
+      </div>
 
-          {/* Filters */}
-          <div className="mt-4 grid grid-cols-1 gap-2 sm:gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 py-6">
+        {/* Premium Hero */}
+        <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 sm:p-8 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col md:flex-row gap-6 md:items-center justify-between">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 via-purple-900/20 to-[#050505] -z-10" />
+          
+          <div className="max-w-2xl">
+            {isCseTargeted && (
+               <span className="inline-block py-1 px-3 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 tracking-wide text-xs font-bold uppercase mb-3 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                 Tailored for CSE Placement
+               </span>
+            )}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-indigo-300 leading-tight">
+              Elysium Community & Courses
+            </h1>
+            <p className="mt-2 text-sm md:text-base text-gray-400 max-w-xl">
+              Elevate your learning with premium curated paths, community tutor uploads, and a highly focused placement roadmap.
+            </p>
+          </div>
+
+          <div className="shrink-0 flex items-center justify-start md:justify-end">
+            <button
+               onClick={() => setIsUploadModalOpen(true)}
+               className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 p-4 font-bold text-white shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all hover:scale-[1.02]"
+            >
+               <div className="absolute inset-0 bg-white/20 opacity-0 transition-opacity group-hover:opacity-100" />
+               <UploadCloud size={24} className="group-hover:-translate-y-1 transition-transform" />
+               <span className="text-left">
+                  <div className="text-sm font-semibold tracking-wide text-purple-100">STARTUP PROGRAM</div>
+                  <div className="text-lg leading-none">Share Your Knowledge</div>
+               </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4 relative z-20">
             <div className="relative sm:col-span-2 min-w-0">
-              <Search
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Search by title, provider or topic…"
-                className="w-full rounded-lg border border-gray-800 bg-white/5 px-9 py-2.5 sm:py-3 text-gray-100 outline-none focus:border-purple-500"
+                placeholder="Search by title, tutor or topic…"
+                className="w-full rounded-xl border border-white/10 bg-white/5 backdrop-blur-md px-11 py-3.5 text-gray-100 outline-none focus:border-purple-500/80 focus:bg-white/10 transition shadow-inner"
               />
             </div>
 
             <select
               value={provider}
               onChange={(e) => setProvider(e.target.value)}
-              className="w-full min-w-0 rounded-lg border border-gray-800 bg-[#0b1021] px-3 py-2.5 sm:py-3 text-sm text-gray-100 focus:border-purple-500"
+              className="w-full min-w-0 rounded-xl border border-white/10 bg-[#0b0b14] px-4 py-3.5 text-sm text-gray-200 focus:border-purple-500/80 transition"
             >
               <option value="All">All Providers</option>
+              <option value="Tutor">Community Tutors</option>
               {PROVIDERS.map((p) => (
-                <option key={p} value={p}>
-                  {p}
-                </option>
+                <option key={p} value={p}>{p}</option>
               ))}
             </select>
 
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as any)}
-              className="w-full min-w-0 rounded-lg border border-gray-800 bg-[#0b1021] px-3 py-2.5 sm:py-3 text-sm text-gray-100 focus:border-purple-500"
+              className="w-full min-w-0 rounded-xl border border-white/10 bg-[#0b0b14] px-4 py-3.5 text-sm text-gray-200 focus:border-purple-500/80 transition"
             >
               <option value="All">All Languages</option>
               <option value="English">English</option>
               <option value="Hindi">Hindi</option>
               <option value="Mixed">Mixed</option>
             </select>
+        </div>
 
-            {/* Class Selector for STEAM (appears only when STEAM category selected) */}
-            {selectedCategory === "STEAM" && (
-              <select
-                value={selectedClass || ""}
-                onChange={(e) =>
-                  setSelectedClass(e.target.value ? e.target.value : null)
-                }
-                className="w-full min-w-0 rounded-lg border border-gray-800 bg-[#0b1021] px-3 py-2.5 sm:py-3 text-sm text-gray-100 focus:border-purple-500"
-              >
-                <option value="">All Classes</option>
-                {classes.map((c) => (
-                  <option key={c} value={c}>
-                    Class {c}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          {/* Category Tiles */}
-          <CategoryTiles
-            selected={selectedCategory}
-            onSelect={(c) => {
+        {/* Categories */}
+        <div className="relative z-20 mt-2">
+            <CategoryTiles selected={selectedCategory} onSelect={(c) => {
               setSelectedCategory(c);
               setSelectedStream(null);
               setSelectedSubject(null);
               setSubjectQ("");
               setTechTopic(null);
               setSelectedClass(null);
-            }}
-          />
+            }} />
+        </div>
 
-          {/* Stats */}
-          <div className="mt-3 sm:mt-4">
-            <button
-              onClick={() => setChartOpen((v) => !v)}
-              className="inline-flex items-center gap-2 rounded-md border border-gray-700 bg-white/5 px-3 py-2 text-xs sm:text-sm text-gray-200 hover:border-purple-500"
-            >
-              <PieIcon size={16} /> Stats
-            </button>
+        {/* CONTENT RENDERER */}
+        <section className="mt-8 relative z-20">
+          
+          {/* Default CSE Targeted view */}
+          {isCseTargeted && (
+             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                <RenderSection title="Top Tutor Uploads" items={Object.values(tutorUploads)} icon={Rocket} />
+                <RenderSection title="Placement Preparation (DSA)" items={cseDSA} icon={Rocket} />
+                <RenderSection title="Core CSE Subjects" items={cseCore} icon={Rocket} />
+                <RenderSection title="Trending Technologies" items={cseTrending} icon={Rocket} />
+             </motion.div>
+          )}
 
-            {chartOpen && (
-              <div className="mt-3 rounded-xl border border-white/10 bg-[#0b1021]/95 p-3 sm:p-4 shadow-2xl">
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="text-xs sm:text-sm font-semibold text-gray-200">
-                    Your study time (minutes)
-                    {activeTitle ? ` • Now playing: ${activeTitle}` : ""}
-                  </span>
-                  <button onClick={() => setChartOpen(false)} className="shrink-0">
-                    <X size={16} className="text-gray-400" />
-                  </button>
-                </div>
-
-                {chartData.length === 0 ? (
-                  <div className="grid h-[clamp(200px,45vw,360px)] place-items-center rounded-lg border border-dashed border-white/10 text-xs sm:text-sm text-gray-400">
-                    Start a video (inline or modal). The chart updates only while playing.
-                  </div>
-                ) : (
-                  <div style={{ height: "clamp(220px, 48vw, 400px)" }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <defs>
-                          <filter
-                            id="softShadow"
-                            x="-20%"
-                            y="-20%"
-                            width="140%"
-                            height="140%"
-                          >
-                            <feDropShadow
-                              dx="0"
-                              dy="6"
-                              stdDeviation="8"
-                              floodOpacity={0.25}
-                            />
-                          </filter>
-                        </defs>
-
-                        <Pie
-                          data={chartData}
-                          dataKey="value"
-                          nameKey="name"
-                          cx="50%"
-                          cy="54%"
-                          innerRadius={isSmall ? 44 : 58}
-                          outerRadius={isSmall ? 94 : 126}
-                          isAnimationActive={false}
-                          stroke="none"
-                          filter="url(#softShadow)"
-                        >
-                          {chartData.map((_, i) => (
-                            <Cell
-                              key={`depth-${i}`}
-                              fill={darken(COLORS[i % COLORS.length], 0.36)}
-                            />
-                          ))}
-                        </Pie>
-
-                        <Pie
-                          data={chartData}
-                          dataKey="value"
-                          nameKey="name"
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={isSmall ? 40 : 52}
-                          outerRadius={isSmall ? 90 : 120}
-                          label={isSmall ? false : <LabelComp />}
-                          labelLine={!isSmall}
-                          isAnimationActive
-                        >
-                          {chartData.map((_, i) => (
-                            <Cell
-                              key={`cell-${i}`}
-                              fill={COLORS[i % COLORS.length]}
-                              style={{
-                                cursor: "pointer",
-                                transition: "transform 0.2s",
-                              }}
-                              onMouseEnter={(e: any) => {
-                                (e.target as HTMLElement).style.transform = "scale(1.05)";
-                              }}
-                              onMouseLeave={(e: any) => {
-                                (e.target as HTMLElement).style.transform = "scale(1)";
-                              }}
-                            />
-                          ))}
-                        </Pie>
-
-                        <Tooltip
-                          formatter={(v: any, _n: any, p: any) => [`${v} min`, p?.payload?.name]}
-                          contentStyle={{
-                            background: "rgba(9,12,28,.98)",
-                            border: "1px solid rgba(255,255,255,.25)",
-                          }}
-                          itemStyle={{ color: "#f8fafc" }}
-                          labelStyle={{ color: "#cbd5e1" }}
-                          wrapperStyle={{ outline: "none" }}
-                        />
-                        <Legend
-                          verticalAlign="bottom"
-                          iconType="circle"
-                          wrapperStyle={{
-                            color: "#e5e7eb",
-                            fontSize: isSmall ? "0.8rem" : "0.9rem",
-                            paddingTop: 8,
-                            maxWidth: "100%",
-                            overflowX: "auto",
-                            whiteSpace: "nowrap",
-                          }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
+          {/* User Manually Selected Filters */}
+          {!isCseTargeted && (
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+                
+                {/* Curriculum Sub-filters */}
+                {selectedCategory === "Curriculum" && (
+                  <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-5 mb-6 backdrop-blur-sm">
+                    <span className="text-sm font-bold text-gray-300 uppercase tracking-widest mb-3 block">Select Stream</span>
+                    <StreamSelector streams={streams} selected={selectedStream} onSelect={(s) => { setSelectedStream(s); setSelectedSubject(null); setSubjectQ(""); }} />
+                    {selectedStream && (
+                      <div className="mt-5 pt-5 border-t border-white/10">
+                        <SubjectList stream={selectedStream} query={subjectQ} onQueryChange={setSubjectQ} onSelect={(s) => setSelectedSubject(s)} />
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
 
-      {/* Topics */}
-      <section className="mx-auto mt-5 sm:mt-6 w-full max-w-7xl px-3 sm:px-6">
-        <TopicFilter
-          topics={["All", ...TOPICS]}
-          selected={topic}
-          onSelect={setTopic}
-        />
-      </section>
+                {/* Technical Sub-filters */}
+                {selectedCategory === "Technical" && (
+                  <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-5 mb-6 backdrop-blur-sm">
+                    <span className="text-sm font-bold text-gray-300 uppercase tracking-widest block mb-3">Focus Area</span>
+                    <div className="flex flex-wrap gap-3">
+                      {["DSA", "Languages", "Interview"].map((t) => (
+                        <button key={t} onClick={() => setTechTopic((cur) => (cur === t ? null : t))} className={`px-5 py-2 rounded-xl text-sm font-semibold transition ${techTopic === t ? "bg-purple-600 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]" : "bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300"}`}>
+                          {t}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-      {/* CONDITIONAL: Category specific controls */}
-      <section className="mx-auto mt-5 sm:mt-6 w-full max-w-7xl px-3 sm:px-6">
-        {selectedCategory === "Curriculum" && (
-          <div>
-            <div className="mt-3">
-              <span className="text-sm font-semibold text-gray-200">Select Stream</span>
-              <div className="mt-2">
-                <StreamSelector
-                  streams={streams}
-                  selected={selectedStream}
-                  onSelect={(s) => {
-                    setSelectedStream(s);
-                    setSelectedSubject(null);
-                    setSubjectQ("");
-                  }}
-                />
-              </div>
-            </div>
-
-            {selectedStream && (
-              <div className="mt-4">
-                <div className="flex gap-3 items-center">
-                  <input
-                    value={subjectQ}
-                    onChange={(e) => setSubjectQ(e.target.value)}
-                    placeholder={`Search subjects in ${selectedStream}...`}
-                    className="rounded-lg border bg-white/5 px-3 py-2 text-sm text-gray-100 outline-none focus:border-purple-500"
-                  />
+                <div className="mt-4 scroll-mt-24" ref={resultsRef}>
+                  {selectedSubject || techTopic || (!["Curriculum", "Technical"].includes(selectedCategory!)) ? (
+                    <TopicGrid items={displayed} onOpen={handleOpen} emptyMessage="No playlists match your current filters." columns={{ base: 1, sm: 2, lg: 3 }} />
+                  ) : (
+                    <div className="flex h-40 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] text-gray-500">
+                       Select deeper filters above to view content.
+                    </div>
+                  )}
                 </div>
+             </motion.div>
+          )}
+        </section>
 
-                <SubjectList
-                  stream={selectedStream}
-                  query={subjectQ}
-                  onSelect={(s) => setSelectedSubject(s)}
-                />
-              </div>
-            )}
+      </div>
 
-            {/* When subject chosen, show playlists for that subject */}
-            {selectedSubject && (
-              <div className="mt-6">
-                <TopicGrid
-                  items={displayed}
-                  onOpen={handleOpen}
-                  emptyMessage="No playlists found for the chosen subject."
-                />
-              </div>
-            )}
-          </div>
-        )}
+      {/* Modals */}
+      <UploadModal 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setIsUploadModalOpen(false)} 
+        onUploadSuccess={refreshUploads}
+        defaultSubField={userSubField}
+      />
 
-        {selectedCategory === "Technical" && (
-          <div>
-            <div className="mt-2 flex gap-3 items-center">
-              {["DSA", "Languages", "Interview"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTechTopic((cur) => (cur === t ? null : t))}
-                  className={`px-3 py-1 rounded-md border ${techTopic === t ? "border-purple-500 bg-white/5" : "border-white/6"
-                    }`}
-                >
-                  {t}
-                </button>
-              ))}
-              <div className="ml-auto text-sm text-gray-400">Tip: use search to narrow by language/problem.</div>
-            </div>
-
-            <div className="mt-4">
-              <TopicGrid
-                items={displayed}
-                onOpen={handleOpen}
-                emptyMessage="No technical playlists match your filters."
-              />
-            </div>
-          </div>
-        )}
-
-        {selectedCategory === "Project" && (
-          <div>
-            <div className="mt-3 text-sm text-gray-300">Project-based learning — grouped project playlists and full courses.</div>
-            <div className="mt-4">
-              <TopicGrid
-                items={displayed}
-                onOpen={handleOpen}
-                emptyMessage="No project playlists available yet."
-              />
-            </div>
-          </div>
-        )}
-
-        {selectedCategory === "Trending" && (
-          <div>
-            <div className="mt-3 text-sm text-gray-300">Trending topics & industry resources — curated feeds and playlists.</div>
-            <div className="mt-4">
-              <TopicGrid
-                items={displayed}
-                onOpen={handleOpen}
-                emptyMessage='No trending items yet — seed with "Generative AI", "Cloud", "Cybersecurity".'
-              />
-            </div>
-          </div>
-        )}
-
-        {selectedCategory === "STEAM" && (
-          <div>
-            <div className="mt-3 text-sm text-gray-300">
-              STEAM curated lessons (Grades 6–12). Choose a class above to filter packs, or leave "All Classes".
-            </div>
-            <div className="mt-4">
-              <TopicGrid
-                items={displayed}
-                onOpen={handleOpen}
-                emptyMessage="No STEAM packs match your filters."
-              />
-            </div>
-          </div>
-        )}
-
-        {!selectedCategory && (
-          <div className="mt-4">
-            <TopicGrid
-              items={displayed}
-              onOpen={handleOpen}
-              emptyMessage="No playlists found."
-            />
-          </div>
-        )}
-      </section>
-
-      {/* Modal */}
       <Modal open={!!open} onClose={() => setOpen(null)} title={open?.title}>
         {open && (
           <div>
-            <div className="aspect-video w-full">
+            <div className="aspect-video w-full rounded-xl overflow-hidden ring-1 ring-white/10 shadow-2xl bg-black">
               <iframe
-                className="h-full w-full rounded-xl"
+                className="h-full w-full"
                 src={getEmbedUrl(open)}
                 title={open.title}
-                allow="autoplay; encrypted-media"
+                allow="autoplay; encrypted-media; picture-in-picture"
                 allowFullScreen
               />
             </div>
-            <p className="mt-3 text-xs sm:text-sm text-gray-400">{open.description}</p>
-            <a
-              href={getExternalUrl(open)}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 sm:px-4 py-2 text-sm text-gray-200 hover:bg-white/20"
-            >
-              <ExternalLink size={16} /> Open on YouTube
-            </a>
+            <p className="mt-4 text-sm text-gray-300 leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">{open.description}</p>
+            <div className="mt-5 flex justify-end">
+              <a
+                href={getExternalUrl(open)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-purple-600/20 px-5 py-2.5 text-sm font-semibold text-purple-300 hover:bg-purple-600/40 hover:text-white transition"
+              >
+                <ExternalLink size={16} /> Open externally
+              </a>
+            </div>
           </div>
         )}
       </Modal>
 
-      <style jsx global>{`
-        select, select option { color: #e5e7eb; background: #0b1021; }
-      `}</style>
     </div>
   );
 }

@@ -1,18 +1,12 @@
-
-@import "hover.css/css/hover-min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-
-
+/* ─── 3D Helpers ─── */
 .perspective-1200 { perspective: 1200px; }
 .preserve-3d { transform-style: preserve-3d; }
 
-/* app/globals.css */
-
-/* Dark, subtle gradient background reminiscent of LeetCode */
+/* ─── Dark LeetCode-style background ─── */
 .lc-bg {
   --bg1: #0b1020;
   --bg2: #0e1326;
@@ -23,9 +17,9 @@
     linear-gradient(180deg, var(--bg1), var(--bg2) 50%, var(--bg3));
 }
 
-/* Reusable glass card */
+/* ─── Reusable glass card ─── */
 .glass {
-    -webkit-backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   background: rgba(12, 16, 29, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -35,7 +29,7 @@
   border-radius: 14px;
 }
 
-/* Panel shells to keep visuals consistent */
+/* ─── Panel shells ─── */
 .panel {
   display: flex;
   flex-direction: column;
@@ -67,7 +61,7 @@
   border-top-right-radius: 14px;
 }
 
-/* LeetCode-like tabs and pills */
+/* ─── Tabs & Pills ─── */
 .tabs { display: flex; gap: 0.6rem; }
 .tab {
   font-size: 0.8rem;
@@ -93,7 +87,7 @@
 .pill-med  { color: #f59e0b; background: rgba(245, 158, 11, 0.15); }
 .pill-hard { color: #f87171; background: rgba(248, 113, 113, 0.15); }
 
-/* Buttons */
+/* ─── Buttons ─── */
 .btn-primary {
   background: #4f46e5;
   color: white;
@@ -127,7 +121,7 @@
 }
 .btn-ghost:hover { background: rgba(99, 102, 241, 0.15); }
 
-/* tiny keyframe helpers (Tailwind's animate-in style) */
+/* ─── Keyframe Animations ─── */
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes slideRight { from { transform: translateX(10px); opacity: 0 } to { transform: translateX(0); opacity: 1 } }
 @keyframes slideUp { from { transform: translateY(8px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
@@ -136,19 +130,17 @@
 .slide-in-from-right { animation: slideRight 180ms ease-out; }
 .slide-in-from-bottom { animation: slideUp 180ms ease-out; }
 
-
-/* ====== Split handles look & feel ====== */
+/* ─── Split Handles (react-resizable-panels) ─── */
 .rp-Handle {
   position: relative;
-  background: rgba(15, 23, 42, 0.7);        /* slate-900/70 */
+  background: rgba(15, 23, 42, 0.7);
   transition: background 120ms ease;
 }
-.rp-Handle:hover { background: rgba(51, 65, 85, 0.9); } /* slate-700/90  */
-.rp-Handle:active { background: rgba(71, 85, 105, 1); } /* slate-600     */
+.rp-Handle:hover { background: rgba(51, 65, 85, 0.9); }
+.rp-Handle:active { background: rgba(71, 85, 105, 1); }
 .rp-Handle[data-direction="horizontal"] { width: 7px;  cursor: col-resize; }
 .rp-Handle[data-direction="vertical"]   { height: 7px; cursor: row-resize; }
 
-/* the tiny grabber dot */
 .rp-HandleInset {
   position: absolute;
   inset: 0;
@@ -159,22 +151,20 @@
   width: 6px;
   height: 6px;
   border-radius: 9999px;
-  background: rgba(203, 213, 225, 0.7);     /* slate-300/70 */
-  box-shadow: 0 0 0 1px rgba(2, 6, 23, 0.45); /* subtle ring */
+  background: rgba(203, 213, 225, 0.7);
+  box-shadow: 0 0 0 1px rgba(2, 6, 23, 0.45);
 }
 
-
-/* --- 3D Glass Panels & Handles --- */
-
+/* ─── 3D Glass Panels ─── */
 .glass-3d {
   background:
     linear-gradient(180deg, rgba(19,27,45,.86), rgba(13,20,35,.76));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148,163,184,.18); /* slate-400/18 */
+  border: 1px solid rgba(148,163,184,.18);
   box-shadow:
-    0 14px 40px rgba(2,6,23,.55),         /* outer */
-    inset 0 1px 0 rgba(255,255,255,.04);   /* subtle inner top highlight */
+    0 14px 40px rgba(2,6,23,.55),
+    inset 0 1px 0 rgba(255,255,255,.04);
 }
 
 .chrome {
@@ -182,7 +172,6 @@
   border-bottom: 1px solid rgba(148,163,184,.15);
 }
 
-/* Split handles (react-resizable-panels) */
 .split-handle {
   position: relative;
   background: linear-gradient(180deg, rgba(100,116,139,.35), rgba(71,85,105,.35));
@@ -198,7 +187,7 @@
   height: 8px;
   margin: auto;
   border-radius: 9999px;
-  background: #cbd5e1;          /* slate-300 */
+  background: #cbd5e1;
   box-shadow: 0 0 0 2px rgba(2,6,23,.6);
   opacity: .95;
 }
@@ -206,9 +195,7 @@
 .split-handle[data-direction='vertical']  { height: 8px; cursor: row-resize; }
 .split-handle[data-direction='horizontal']{ width:  8px; cursor: col-resize; }
 
-/* === Dragon overrides === */
-
-/* ensure r3f canvas background is transparent */
+/* ─── R3F Canvas ─── */
 .r3f-canvas,
 .r3f-canvas canvas,
 .r3f-canvas > canvas {
@@ -216,60 +203,31 @@
   display: block !important;
 }
 
-/* make the welcome center content guaranteed transparent */
 .welcome-center-panel,
 .hero-panel,
-.panel,
-.card,
 .main-hero {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
 }
 
-/* make pointer-events pass through background layers */
-.pointer-events-none {
-  pointer-events: none !important;
-}
+.r3f-canvas { pointer-events: none; }
+.r3f-static-fallback img { pointer-events: none; display: block; margin: 0 auto; }
 
-/* === Dragon overrides === */
+/* ─── Scrollbar Utilities ─── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* ensure r3f canvas background is transparent */
-.r3f-canvas,
-.r3f-canvas canvas,
-.r3f-canvas > canvas {
-  background: transparent !important;
-  display: block !important;
-}
+/* ─── Select dropdown styling ─── */
+select option { background: #0b0b14; color: white; }
 
-/* make the welcome center content guaranteed transparent */
-.welcome-center-panel,
-.hero-panel,
-.panel,
-.card,
-.main-hero {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* make pointer-events pass through background layers */
-.pointer-events-none {
-  pointer-events: none !important;
-}
-
-/* hide/disable r3f canvas visuals on tiny screens (safety) */
+/* ─── Responsive ─── */
 @media (max-width: 640px) {
   .r3f-canvas { display: none !important; }
 }
 
-/* prefer reduced motion: hide canvas and fall back to static */
 @media (prefers-reduced-motion: reduce) {
   .r3f-canvas { display: none !important; }
 }
-
-/* optional: ensure canvas doesn't intercept pointer events */
-.r3f-canvas { pointer-events: none; }
-
-/* optional static fallback look */
-.r3f-static-fallback img { pointer-events: none; display: block; margin: 0 auto; }

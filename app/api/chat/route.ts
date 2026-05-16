@@ -1,36 +1,42 @@
+// app/api/chat/route.ts
+import { NextResponse } from "next/server";
+
+export const runtime = "nodejs";
+
+const OPENAI_API = "https://api.openai.com/v1/chat/completions";
+const MODEL = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
+const OPENAI_KEY = process.env.OPENAI_API_KEY;
+
 export async function POST(req: Request) {
-
   try {
-
-    const { message, history } = await req.json()
-
-    const limitedHistory = (history || []).slice(-10)
+    const { message, history } = await req.json();
+    const limitedHistory = (history || []).slice(-10);
 
     /* detect if user mentioned a problem number */
-
-    const problemMatch = message.match(/leetcode\s*(\d+)/i)
-
-    let currentProblem = null
+    const problemMatch = message.match(/leetcode\s*(\d+)/i);
+    let currentProblem = null;
 
     if (problemMatch) {
-      currentProblem = problemMatch[1]
+      currentProblem = problemMatch[1];
     }
 
     /* get last mentioned problem from history */
-
     if (!currentProblem) {
       for (let i = limitedHistory.length - 1; i >= 0; i--) {
-        const match = limitedHistory[i].content?.match(/leetcode\s*(\d+)/i)
+        const match = limitedHistory[i].content?.match(/leetcode\s*(\d+)/i);
         if (match) {
-          currentProblem = match[1]
-          break
+          currentProblem = match[1];
+          break;
         }
       }
     }
 
-    const conversation = limitedHistory
-      .map((m:any)=>`${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
-      .join("\n")
+    if (!OPENAI_KEY) {
+      return NextResponse.json({
+        reply:
+          "⚠️ AI Tutor is not configured. Please set OPENAI_API_KEY in your environment variables.",
+      });
+    }
 
     const systemPrompt = `
 You are an expert programming tutor specializing in LeetCode and DSA.
@@ -61,43 +67,48 @@ Short explanation.
 ### Complexity
 Time: O(...)
 Space: O(...)
-`
+`;
 
-    const prompt = `
-${systemPrompt}
+    const messages = [
+      { role: "system", content: systemPrompt },
+      ...limitedHistory.map((m: any) => ({
+        role: m.role === "user" ? "user" : "assistant",
+        content: m.content,
+      })),
+      { role: "user", content: message },
+    ];
 
-Conversation:
-${conversation}
-
-User: ${message}
-
-Assistant:
-`
-
-    const response = await fetch("http://localhost:11434/api/generate", {
+    const response = await fetch(OPENAI_API, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${OPENAI_KEY}`,
+      },
       body: JSON.stringify({
-        model: "mistral",
-        prompt,
-        stream: false
-      })
-    })
+        model: MODEL,
+        messages,
+        temperature: 0.3,
+        max_tokens: 1500,
+      }),
+    });
 
-    const data = await response.json()
+    if (!response.ok) {
+      const errText = await response.text().catch(() => "");
+      console.warn("[CHAT] OpenAI error", response.status, errText.slice(0, 500));
+      return NextResponse.json({
+        reply: "⚠️ AI service temporarily unavailable. Please try again later.",
+      });
+    }
 
-    return Response.json({
-      reply: data?.response || "No response generated."
-    })
+    const data = await response.json();
+    const reply =
+      data?.choices?.[0]?.message?.content || "No response generated.";
 
+    return NextResponse.json({ reply });
   } catch (error) {
-
-    console.error("Chat API error:", error)
-
-    return Response.json({
-      reply: "⚠️ AI failed to generate a response."
-    })
-
+    console.error("Chat API error:", error);
+    return NextResponse.json({
+      reply: "⚠️ AI failed to generate a response.",
+    });
   }
-
 }

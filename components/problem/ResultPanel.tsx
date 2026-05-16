@@ -4,12 +4,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   ResponsiveContainer,
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   CartesianGrid,
   XAxis,
   YAxis,
-  Tooltip,
+  Tooltip as RechartsTooltip,
 } from "recharts";
 
 /* ---------------- types ---------------- */
@@ -386,11 +386,29 @@ export default function ResultPanel({
         .result-scroll { overflow:auto; -webkit-overflow-scrolling: touch; }
         .result-scroll::-webkit-scrollbar { width:10px; height:10px; }
         .result-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius:6px; }
-        .complex-label { font-style: italic; font-size: 18px; text-align:center; margin-bottom:6px; color: #e6eef8; }
-        pre.compact { max-height: 240px; overflow:auto; white-space: pre-wrap; }
+        .complex-label { font-family: monospace; font-weight: bold; font-size: 18px; text-align:center; margin-bottom:6px; color: #a78bfa; }
+        pre.compact { max-height: 300px; overflow:auto; white-space: pre-wrap; font-family: 'JetBrains Mono', monospace; line-height: 1.5; }
         @media (max-width: 900px) {
           .result-grid { grid-template-columns: 1fr; }
           .chart-h { height: 220px; }
+        }
+        
+        .syntax-error-block {
+          background: #1e1e2e;
+          border-left: 4px solid #f43f5e;
+          border-radius: 6px;
+          overflow: hidden;
+        }
+        .syntax-error-header {
+          background: rgba(244, 63, 94, 0.1);
+          padding: 8px 12px;
+          border-bottom: 1px solid rgba(244, 63, 94, 0.2);
+          font-weight: 600;
+          color: #fca5a5;
+        }
+        .syntax-error-body {
+          padding: 12px;
+          color: #e2e8f0;
         }
       `}</style>
 
@@ -457,12 +475,26 @@ export default function ResultPanel({
               <div className="text-xs uppercase text-slate-400 mb-2">Runner / Compile Output</div>
               <div className="space-y-2">
                 {parsedCompileErrors.map((e, idx) => (
-                  <div key={idx} className="rounded border border-rose-700/40 bg-rose-900/10 p-3 text-sm text-rose-200">
-                    <div style={{ fontWeight: 600 }}>{e.type ?? "Error"}</div>
-                    <div className="mt-1 text-slate-300/90">
-                      {e.line != null && <div className="text-xs text-slate-400">Line: {e.line}</div>}
-                      <div>{e.message}</div>
-                      {e.snippet && <pre className="mt-2 text-xs bg-slate-800 p-2 rounded text-slate-200">{e.snippet}</pre>}
+                  <div key={idx} className="syntax-error-block text-sm mb-3">
+                    <div className="syntax-error-header flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span className="capitalize">{e.type ?? "Compilation Error"}</span>
+                      </div>
+                      {e.line != null && <span className="font-mono text-xs bg-rose-950 px-2 py-0.5 rounded text-rose-300">Line {e.line}</span>}
+                    </div>
+                    <div className="syntax-error-body">
+                      <div className="font-mono text-xs mb-2 leading-relaxed">{e.message}</div>
+                      {e.snippet && (
+                        <div className="mt-3 bg-black/40 rounded-md p-3 relative">
+                          <div className="absolute left-0 top-0 bottom-0 w-8 bg-black/60 border-r border-white/5 rounded-l-md flex items-center justify-center text-xs text-slate-600 font-mono">
+                            {e.line}
+                          </div>
+                          <pre className="text-xs pl-8 font-mono text-rose-200 overflow-x-auto">{e.snippet}</pre>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -579,18 +611,62 @@ export default function ResultPanel({
 
           {/* Graph */}
           {graphData.length > 0 && (
-            <div className="rounded border border-slate-800 bg-slate-900/40 p-3 mb-4">
-              <div className="complex-label">{normalizeBigO(r.complexity?.time ?? r.analysis?.complexity?.time) ?? ""}</div>
-              <div className="text-xs text-slate-400 mb-2">Time Complexity Graph</div>
-              <div className="chart-h" style={{ height: 260 }}>
+            <div className="rounded-xl border border-slate-800 bg-[#0f141e] p-5 mb-4 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-500/5 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="relative z-10 flex items-center justify-between mb-4">
+                <div>
+                  <div className="text-sm font-semibold text-slate-300">Time Complexity Analysis</div>
+                  <div className="text-xs text-slate-500 mt-0.5">Estimated performance over n inputs</div>
+                </div>
+                <div className="px-3 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-mono font-bold text-lg shadow-[0_0_15px_rgba(99,102,241,0.15)]">
+                  {normalizeBigO(r.complexity?.time ?? r.analysis?.complexity?.time) ?? "O(n)"}
+                </div>
+              </div>
+              
+              <div className="chart-h relative z-10" style={{ height: 280 }}>
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={graphData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                    <XAxis dataKey="n" stroke="#cbd5e1" />
-                    <YAxis domain={yDomain} stroke="#cbd5e1" />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="ops" stroke="#a78bfa" strokeWidth={2} dot={false} />
-                  </LineChart>
+                  <AreaChart data={graphData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorOps" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#818cf8" stopOpacity={0.5}/>
+                        <stop offset="95%" stopColor="#818cf8" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
+                    <XAxis 
+                      dataKey="n" 
+                      stroke="#64748b" 
+                      tick={{ fill: '#64748b', fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={{ stroke: 'rgba(255,255,255,0.1)' }}
+                      tickFormatter={(val) => `n=${val}`}
+                    />
+                    <YAxis 
+                      domain={yDomain} 
+                      stroke="#64748b" 
+                      tick={{ fill: '#64748b', fontSize: 11 }}
+                      tickLine={false}
+                      axisLine={false}
+                      tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val}
+                    />
+                    <RechartsTooltip 
+                      contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '8px', color: '#f8fafc', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)' }}
+                      itemStyle={{ color: '#818cf8', fontWeight: 'bold' }}
+                      labelStyle={{ color: '#94a3b8', marginBottom: '4px' }}
+                      formatter={(value: any) => [Math.round(value), 'Operations']}
+                      labelFormatter={(label: any) => `Input Size (n) = ${label}`}
+                    />
+                    <Area 
+                      type="monotone" 
+                      dataKey="ops" 
+                      stroke="#818cf8" 
+                      strokeWidth={3} 
+                      fillOpacity={1} 
+                      fill="url(#colorOps)" 
+                      activeDot={{ r: 6, fill: "#818cf8", stroke: "#1e293b", strokeWidth: 2 }}
+                    />
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
