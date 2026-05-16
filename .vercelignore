@@ -1,0 +1,8 @@
+# Ignore the standalone Express backend — it's not deployed on Vercel
+backend/
+backend/**
+
+# Dev/test files
+test-mongo.js
+.env
+.env.local

@@ -4,7 +4,7 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "outputDirectory": ".next",
-  "regions": ["iad1"],
+  "ignoreCommand": "exit 0",
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
