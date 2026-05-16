@@ -341,5 +341,5 @@ This project is open-source and available under the [MIT License](LICENSE).
 ---
 
 <p align="center">
-  Built with ❤️ by <a href="https://github.com/Sachin-pandey13">Sachin Pandey</a>
+  Built with ❤️ by <a href="https://github.com/Sachin-pandey13">Sachin Pandey And Team </a>
 </p>
