@@ -49,3 +49,8 @@ coverage/
 *.log
 test-mongo.js
 backend/Desktop - Shortcut.lnk
+
+# Backend package files (prevents Vercel multi-service detection)
+# Backend source code is still tracked — only these are hidden
+backend/package.json
+backend/package-lock.json
